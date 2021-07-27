@@ -1,5 +1,5 @@
 import { tripCost } from './trip-cost';
-export const tripInfo = () => `<section class="trip-main__trip-info  trip-info">
+const tripInfo = () => `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
               <h1 class="trip-info__title">Amsterdam — Chamonix — Geneva</h1>
 
@@ -8,3 +8,4 @@ export const tripInfo = () => `<section class="trip-main__trip-info  trip-info">
 
             ${tripCost()}
           </section>`;
+export { tripInfo };

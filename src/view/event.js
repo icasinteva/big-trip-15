@@ -1,4 +1,4 @@
-export const event = () => `<div class="event">
+const event = () => `<div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
@@ -33,3 +33,4 @@ export const event = () => `<div class="event">
                   <span class="visually-hidden">Open event</span>
                 </button>
               </div>`;
+export { event };

@@ -1,5 +1,7 @@
 import { price } from './price';
 
-export const eventPrice = () => `<p class="event-price">
+const eventPrice = () => `<p class="event-price">
               Total: ${price('event-price')}
             </p>`;
+
+export { eventPrice };

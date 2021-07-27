@@ -1,5 +1,6 @@
 import { offersSection } from './offers-section';
-export const editForm =
+
+const editForm =
   () => `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -109,3 +110,5 @@ export const editForm =
                   </section>
                 </section>
               </form>`;
+
+export { editForm };

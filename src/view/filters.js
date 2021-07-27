@@ -1,4 +1,4 @@
-export const filters = () => `<div class="trip-controls__filters">
+const filters = () => `<div class="trip-controls__filters">
               <h2 class="visually-hidden">Filter events</h2>
               <form class="trip-filters" action="#" method="get">
                 <div class="trip-filters__filter">
@@ -19,3 +19,5 @@ export const filters = () => `<div class="trip-controls__filters">
                 <button class="visually-hidden" type="submit">Accept filter</button>
               </form>
             </div>`;
+
+export { filters };
