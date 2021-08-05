@@ -19,7 +19,7 @@ const generateDate = () => {
     .add(getRandomInteger(0, 34), 'minute');
 };
 
-const convertMS = diffMinutes => {
+const convertMS = (diffMinutes) => {
   const dayMinutes = 24 * 60;
   const days = Math.trunc(diffMinutes / dayMinutes);
   const hours = Math.trunc((diffMinutes - dayMinutes * days) / 60);
@@ -46,7 +46,7 @@ const getDuration = (startDate, endDate) => {
   return res.join(' ');
 };
 
-const humanizeEventStartDate = dateStr => dayjs(dateStr).format('MMM DD');
+const humanizeEventStartDate = (dateStr) => dayjs(dateStr).format('MMM DD');
 
 const checkTag = (template, tagName) => {
   let htmlObject = document.createElement('div');
@@ -56,7 +56,7 @@ const checkTag = (template, tagName) => {
   return htmlObject.tagName === tagName;
 };
 
-const calculateCost = arr =>
+const calculateCost = (arr) =>
   arr.reduce((acc, reducer) => {
     let offersCost = 0;
     const { price, offers } = reducer;
@@ -84,9 +84,9 @@ const sortDateDown = (a, b) => {
 const sortEventsByDate = (events, callBack) =>
   events.sort((a, b) => callBack(a.startDate, b.startDate));
 
-const sortEventsByDateUp = events => sortEventsByDate(events, sortDateUp);
+const sortEventsByDateUp = (events) => sortEventsByDate(events, sortDateUp);
 
-const sortEventsByTime = events =>
+const sortEventsByTime = (events) =>
   events.sort((a, b) => {
     if (
       getDuration(a.startDate, a.endDate) > getDuration(b.startDate, b.endDate)
@@ -96,7 +96,7 @@ const sortEventsByTime = events =>
     return -1;
   });
 
-const sortEventsByPrice = events =>
+const sortEventsByPrice = (events) =>
   events.sort((a, b) => {
     if (a.price > b.price) {
       return 1;
@@ -104,7 +104,7 @@ const sortEventsByPrice = events =>
     return -1;
   });
 
-const getTripRange = events => {
+const getTripRange = (events) => {
   const startDates = events.map(({ startDate }) => startDate);
   const sortedStartDates = startDates.sort(sortDateUp);
   const endDates = events.map(({ endDate }) => endDate);
@@ -116,14 +116,14 @@ const getTripRange = events => {
   };
 };
 
-const getDestinations = events =>
+const getDestinations = (events) =>
   Array.from(new Set(events.map(({ destination }) => destination)));
 
 const filterEvents = {
-  [Filter.EVERYTHING]: events => events,
-  [Filter.FUTURE]: events =>
+  [Filter.EVERYTHING]: (events) => events,
+  [Filter.FUTURE]: (events) =>
     events.filter(({ startDate }) => startDate.isAfter(dayjs())),
-  [Filter.PAST]: events =>
+  [Filter.PAST]: (events) =>
     events.filter(({ startDate }) => !startDate.isAfter(dayjs())),
 };
 
@@ -169,5 +169,5 @@ export {
   generateDestination,
   getDestinations,
   filterEvents,
-  sortEvents,
+  sortEvents
 };

@@ -1,6 +1,6 @@
 import { priceTemplate } from './price';
 
-const tripCost = price => `<p class="trip-info__cost">
+const tripCost = (price) => `<p class="trip-info__cost">
               Total: ${priceTemplate('trip-info__cost', price)}
             </p>`;
 

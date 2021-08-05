@@ -1,6 +1,6 @@
 import { getRandomInteger, generateDate, generateDestination } from '../utils';
 import { generateOffers } from './offers';
-import { Type, Destination } from '../enums';
+import { Type } from '../enums';
 
 const generateEvent = () => {
   const startDate = generateDate();

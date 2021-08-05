@@ -6,7 +6,7 @@ import { eventDetailsSection } from './event-details__section';
 const createAddEventFormTemplate = () => {
   const selectedType = generateType();
   const selectedDestination = generateDestination();
-  const typeItems = Type.map(type => {
+  const typeItems = Type.map((type) => {
     const checked = type === selectedType ? 'checked' : '';
     return `<div class="event__type-item">
                           <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${type} ${checked}>
@@ -15,7 +15,7 @@ const createAddEventFormTemplate = () => {
   }).join('');
 
   const destinations = Object.values(Destination).map(
-    destination => `<option value=${destination}></option>`,
+    (destination) => `<option value=${destination}></option>`,
   );
 
   const destinationsData = {
@@ -114,9 +114,9 @@ const createAddEventFormTemplate = () => {
                   <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 ${eventDetailsSection(
-                  destinationsData[selectedDestination],
-                  selectedType,
-                )}
+    destinationsData[selectedDestination],
+    selectedType,
+  )}
               </form>`;
 };
 export { createAddEventFormTemplate };

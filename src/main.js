@@ -12,7 +12,7 @@ import {
   sortEvents,
   getDestinations,
   generateFilter,
-  generateSorting,
+  generateSorting
 } from './utils';
 
 const EVENTS_COUNT = 4;
