@@ -1,15 +1,21 @@
-import { event } from './event';
-import { editForm } from './edit-form';
+import { createEventTemplate } from './event';
+import { checkTag } from '../utils';
 
-const getEvents = (eventsArr) => eventsArr.reduce((ev, r) => ev + r, '');
-const events = [editForm(), ...Array(3).fill(event())];
+const createEventsListItem = (ev) => `<li class="trip-events__item">${ev}</li>`;
 
-const tripEventsList = () => {
-  const tripEvents = getEvents(events);
+const createEventsListTemplate = (events) => {
+  const [form, ...restEvents] = events;
+  const isAddFormOpened = checkTag(form, 'FORM');
 
-  return `<ul class="trip-events__list">
-  ${tripEvents}
-  </ul>`;
+  const eventsTemplates = isAddFormOpened ? restEvents : events;
+  const addFormListItem = isAddFormOpened ? createEventsListItem(form) : '';
+
+  const eventsListItems = [
+    addFormListItem,
+    ...eventsTemplates.map(createEventTemplate).map(createEventsListItem),
+  ].join('');
+
+  return `<ul class="trip-events__list">${eventsListItems}</ul>`;
 };
 
-export { tripEventsList };
+export { createEventsListTemplate };

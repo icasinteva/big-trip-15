@@ -1,11 +1,20 @@
-import { tripCost } from './trip-cost';
-const tripInfo = () => `<section class="trip-main__trip-info  trip-info">
-            <div class="trip-info__main">
-              <h1 class="trip-info__title">Amsterdam — Chamonix — Geneva</h1>
+import { priceTemplate } from './price';
 
-              <p class="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
+const tripCost = (price) => `<p class="trip-info__cost">
+              Total: ${priceTemplate('trip-info__cost', price)}
+            </p>`;
+
+const tripInfo = ({
+  dates: { startDate, endDate },
+  destinations,
+  price,
+}) => `<section class="trip-main__trip-info  trip-info">
+            <div class="trip-info__main">
+              <h1 class="trip-info__title">${destinations.join(' — ')}</h1>
+
+              <p class="trip-info__dates">${startDate}&nbsp;—&nbsp;${endDate}</p>
             </div>
 
-            ${tripCost()}
+            ${tripCost(price)}
           </section>`;
 export { tripInfo };
