@@ -7,14 +7,18 @@ const renderTemplate = (container, template, place) => {
 
 const render = (container, element, place) => {
   switch (place) {
-    case RenderPosition.AFTERBEGIN:
+    case RenderPosition.AFTERBEGIN: {
       container.prepend(element);
       break;
-    case RenderPosition.BEFOREEND:
+    }
+    case RenderPosition.BEFOREEND: {
       container.append(element);
       break;
-    case RenderPosition.BEFOREBEGIN:
+    }
+    case RenderPosition.BEFOREBEGIN: {
       container.parentNode.insertBefore(element, container);
+      break;
+    }
   }
 };
 
