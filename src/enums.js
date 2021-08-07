@@ -6,7 +6,7 @@ const RenderPosition = {
   BEFOREBEGIN: 'beforeBegin',
   BEFOREEND: 'beforeEnd',
 };
-const Type = {
+const EventType = {
   TAXI: 'taxi',
   BUS: 'bus',
   TRAIN: 'train',
@@ -59,14 +59,14 @@ const DestinationData = {
     description: '',
     photos: generatePhotos(),
     offers: {
-      [Type.TAXI]: [
+      [EventType.TAXI]: [
         {
           title: OfferName.UBER,
           id: OfferId.UBER,
           price: 20,
         },
       ],
-      [Type.FLIGHT]: [
+      [EventType.FLIGHT]: [
         {
           title: OfferName.LUGGAGE,
           id: OfferId.LUGGAGE,
@@ -97,14 +97,14 @@ const DestinationData = {
   },
   [Destination.GENEVA]: {
     offers: {
-      [Type.TAXI]: [
+      [EventType.TAXI]: [
         {
           title: OfferName.UBER,
           id: OfferId.UBER,
           price: 20,
         },
       ],
-      [Type.FLIGHT]: [
+      [EventType.FLIGHT]: [
         {
           title: OfferName.LUGGAGE,
           id: OfferId.LUGGAGE,
@@ -148,4 +148,4 @@ const DestinationData = {
   },
 };
 
-export { RenderPosition, Type, Destination, OfferId, OfferName, Filter, Sorting, DestinationData };
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData };

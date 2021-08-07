@@ -1,4 +1,4 @@
-import { getRandomInteger, generateDate, generateType, generateDestination } from '../utils';
+import { getRandomInteger, generateDate, generateEventType, generateDestination } from '../utils';
 import { generateOffers } from './offers';
 
 const generateEvent = () => {
@@ -7,7 +7,7 @@ const generateEvent = () => {
     .add(getRandomInteger(0, 5), 'day')
     .add(getRandomInteger(0, 24), 'hour')
     .add(getRandomInteger(0, 56), 'minute');
-  const type = generateType();
+  const eventType = generateEventType();
   const destination = generateDestination();
 
   return {
@@ -17,8 +17,8 @@ const generateEvent = () => {
     destination,
     id: '0',
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    offers: generateOffers(destination, type),
-    type,
+    offers: generateOffers(destination, eventType),
+    eventType,
   };
 };
 

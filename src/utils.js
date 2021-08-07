@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { RenderPosition, Type, Destination, Filter, Sorting } from './enums';
+import { RenderPosition, EventType, Destination, Filter, Sorting } from './enums';
 
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -176,10 +176,10 @@ const generateFilter = () => {
   return Filter[filters[getRandomInteger(0, filters.length - 1)]];
 };
 
-const generateType = () => {
-  const types = Object.keys(Type);
-  return Type[
-    types[getRandomInteger(0, types.length - 1)]
+const generateEventType = () => {
+  const eventTypes = Object.keys(EventType);
+  return EventType[
+    eventTypes[getRandomInteger(0, eventTypes.length - 1)]
   ];
 };
 
@@ -208,7 +208,7 @@ export {
   calculateCost,
   getTripRange,
   sortEventsByDateUp,
-  generateType,
+  generateEventType,
   generateDestination,
   getDestinations,
   filterEvents,

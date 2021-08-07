@@ -17,10 +17,10 @@ class EventDetailsView {
 
   getElement() {
     if (!this._element) {
-      const { destination, type } = this._event;
+      const { destination, eventType } = this._event;
       const { offers = {}, description, photos = [] } = DestinationData[destination];
-      const typeOffers = offers[type];
-      const offersSectionComponent = new OffersSectionView(typeOffers);
+      const eventTypeOffers = offers[eventType];
+      const offersSectionComponent = new OffersSectionView(eventTypeOffers);
       const destinationSectionComponent = new DestinationSectionView(description, photos);
 
 

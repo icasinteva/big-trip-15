@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
-import { Type, Destination } from '../enums';
+import { EventType, Destination } from '../enums';
 import { createElement } from '../utils';
 
 const createEventAddTemplate = () => {
-  const type = Object.values(Type)[0];
-  const typeItems = Object.values(Type).map((typeItem) => {
-    const checked = typeItem ===  type ? 'checked' : '';
+  const eventType = Object.values(EventType)[0];
+  const eventTypeItems = Object.values(EventType).map((eventTypeItem) => {
+    const checked = eventTypeItem ===  eventType ? 'checked' : '';
     return `<div class="event__type-item">
-            <input id="event-type-${typeItem}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeItem}" ${checked}>
-            <label class="event__type-label  event__type-label--${typeItem}" for="event-type-${typeItem}-1">${typeItem}</label>
+            <input id="event-type-${eventTypeItem}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeItem}" ${checked}>
+            <label class="event__type-label  event__type-label--${eventTypeItem}" for="event-type-${eventTypeItem}-1">${eventTypeItem}</label>
           </div>`;
   }).join('');
 
@@ -24,21 +24,21 @@ const createEventAddTemplate = () => {
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+                  <img class="event__type-icon" width="17" height="17" src="img/icons/${eventType}.png" alt="Event type icon">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
                     <legend class="visually-hidden">Event type</legend>
-                    ${typeItems}
+                    ${eventTypeItems}
                   </fieldset>
                 </div>
               </div>
 
               <div class="event__field-group  event__field-group--destination">
                 <label class="event__label  event__type-output" for="event-destination-1">
-                  ${type}
+                  ${eventType}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
                 <datalist id="destination-list-1">

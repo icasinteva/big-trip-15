@@ -3,7 +3,7 @@ import { renderNestedElement, createElement, getDuration, humanizeEventStartDate
 import { RenderPosition } from '../enums';
 
 const createEventTemplate = (event) => {
-  const { type, destination, startDate, endDate, price, isFavorite } =
+  const { eventType, destination, startDate, endDate, price, isFavorite } =
   event;
   const startTime = startDate.format('HH:MM');
   const endTime = endDate.format('HH:MM');
@@ -16,9 +16,9 @@ const createEventTemplate = (event) => {
   return `<div class="event">
                 <time class="event__date" datetime=${startDate.format()}>${humanizedEventStartDate}</time>
                 <div class="event__type">
-                  <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+                  <img class="event__type-icon" width="42" height="42" src="img/icons/${eventType}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} ${destination}</h3>
+                <h3 class="event__title">${eventType} ${destination}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime=${startDate.format()}>${startTime}</time>
