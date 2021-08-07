@@ -29,7 +29,7 @@ const createElement = (template) => {
 
   newElement.innerHTML = template;
 
-  return newElement.firstChild;
+  return newElement.firstElementChild;
 };
 
 const getRandomInteger = (a = 0, b = 1) => {
@@ -82,7 +82,7 @@ const humanizeEventStartDate = (dateStr) => dayjs(dateStr).format('MMM DD');
 const checkTag = (template, tagName) => {
   let htmlObject = document.createElement('div');
   htmlObject.innerHTML = template;
-  htmlObject = htmlObject.firstChild;
+  htmlObject = htmlObject.firstElementChild;
 
   return htmlObject.tagName === tagName;
 };
