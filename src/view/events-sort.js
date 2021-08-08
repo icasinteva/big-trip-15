@@ -1,6 +1,7 @@
+import { createElement } from '../utils';
 import { Sorting } from '../enums';
 
-const tripEventsSort = (selected = Sorting.DAY) => {
+const createEventsSortTemplate = (selected = Sorting.DAY) => {
   const sort = {
     [Sorting.DAY]: {
       disabled: false,
@@ -34,8 +35,8 @@ const tripEventsSort = (selected = Sorting.DAY) => {
         const disabled = value.disabled ? 'disabled' : '';
 
         return `<div class="trip-sort__item  trip-sort__item--${key}">
-              <input id="sort-${key}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${value}" ${checked} ${disabled}>
-              <label class="trip-sort__btn" for="sort-${Sorting[key]}">${key}</label>
+              <input id="sort-${key}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${key}" ${checked} ${disabled}>
+              <label class="trip-sort__btn" for="sort-${key}">${key}</label>
             </div>`;
       })
     .join('');
@@ -44,4 +45,26 @@ const tripEventsSort = (selected = Sorting.DAY) => {
             ${sortingItems}
           </form>`;
 };
-export { tripEventsSort };
+
+class EventsSortView {
+  constructor(selectedSorting) {
+    this._selectedSorting = selectedSorting;
+  }
+
+  getTemplate() {
+    return createEventsSortTemplate(this._selectedSorting);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+export default EventsSortView;

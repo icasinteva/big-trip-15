@@ -1,5 +1,40 @@
 import dayjs from 'dayjs';
-import { Type, Destination, Filter, Sorting } from './enums';
+import { RenderPosition, EventType, Destination, Filter, Sorting } from './enums';
+
+const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN: {
+      container.prepend(element);
+      break;
+    }
+    case RenderPosition.BEFOREEND: {
+      container.append(element);
+      break;
+    }
+    case RenderPosition.BEFOREBEGIN: {
+      container.parentNode.insertBefore(element, container);
+      break;
+    }
+  }
+};
+
+const renderNestedElement = (container, nestedElement, place) => {
+  if (nestedElement) {
+    render(container, nestedElement, place);
+  }
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement('div');
+
+  newElement.innerHTML = template;
+
+  return newElement.firstElementChild;
+};
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -51,7 +86,7 @@ const humanizeEventStartDate = (dateStr) => dayjs(dateStr).format('MMM DD');
 const checkTag = (template, tagName) => {
   let htmlObject = document.createElement('div');
   htmlObject.innerHTML = template;
-  htmlObject = htmlObject.firstChild;
+  htmlObject = htmlObject.firstElementChild;
 
   return htmlObject.tagName === tagName;
 };
@@ -145,7 +180,12 @@ const generateFilter = () => {
   return Filter[filters[getRandomInteger(0, filters.length - 1)]];
 };
 
-const generateType = () => Type[getRandomInteger(0, Type.length - 1)];
+const generateEventType = () => {
+  const eventTypes = Object.keys(EventType);
+  return EventType[
+    eventTypes[getRandomInteger(0, eventTypes.length - 1)]
+  ];
+};
 
 const generateDestination = () => {
   const destinations = Object.keys(Destination);
@@ -154,8 +194,15 @@ const generateDestination = () => {
   ];
 };
 
+const createPriceTemplate = (className, amount) =>
+  `€&nbsp;<span class="${className}-value">${amount}</span>`;
+
 export {
   getRandomInteger,
+  renderTemplate,
+  createElement,
+  render,
+  renderNestedElement,
   generateDate,
   humanizeEventStartDate,
   generateFilter,
@@ -165,9 +212,10 @@ export {
   calculateCost,
   getTripRange,
   sortEventsByDateUp,
-  generateType,
+  generateEventType,
   generateDestination,
   getDestinations,
   filterEvents,
-  sortEvents
+  sortEvents,
+  createPriceTemplate
 };
