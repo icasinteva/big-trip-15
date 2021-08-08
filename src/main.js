@@ -118,7 +118,7 @@ const renderAddEventForm = (listContainer) => {
     }
   });
 
-  Array.from(eventAddComponent.getElement().querySelectorAll('.event__type-input')).forEach((eventTypeInput) => eventTypeInput.addEventListener('click', (evt) => {
+  eventAddComponent.getElement().querySelectorAll('.event__type-input').forEach((eventTypeInput) => eventTypeInput.addEventListener('click', (evt) => {
     const eventDetailsComponent = new EventDetailsView({ destination: eventAddComponent.getElement().querySelector('.event__input--destination').value, eventType: evt.target.value});
 
     eventAddComponent.getElement().querySelector('.event__type-output').textContent = evt.target.value;

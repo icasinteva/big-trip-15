@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { RenderPosition, EventType, Destination, Filter, Sorting } from './enums';
+import { RenderPosition, EventType, Destination, Filter, Sorting, Keydown } from './enums';
 
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -202,7 +202,7 @@ const remove = (elementToRemove) => {
 };
 
 const onEscKeyDown = (evt, callback) => {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
+  if (evt.key === Keydown.ESCAPE) {
     evt.preventDefault();
     callback();
     document.removeEventListener('keydown', onEscKeyDown);

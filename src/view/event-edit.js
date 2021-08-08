@@ -86,7 +86,7 @@ class EventEditView {
 
       renderNestedElement(this._element, new EventDetailsView(this._event).getElement(), RenderPosition.BEFOREEND);
 
-      Array.from(this._element.querySelectorAll('.event__type-input')).forEach((eventTypeInput) => eventTypeInput.addEventListener('click', (evt) => {
+      this._element.querySelectorAll('.event__type-input').forEach((eventTypeInput) => eventTypeInput.addEventListener('click', (evt) => {
         this._element.querySelector('.event__type-output').textContent = evt.target.value;
         this._element.querySelector('.event__type-icon').src = this._element.querySelector('.event__type-icon').getAttribute('src').replace(/(img\/icons\/)[a-z]+(-[a-z]+){0,}/, `$1${evt.target.value}`);
         this._element.querySelector('.event__type-toggle').checked = false;
