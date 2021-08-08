@@ -5,11 +5,12 @@ import { createElement } from '../utils';
 const createEventAddTemplate = () => {
   const eventType = Object.values(EventType)[0];
   const eventTypeItems = Object.values(EventType).map((eventTypeItem) => {
-    const checked = eventTypeItem ===  eventType ? 'checked' : '';
+    const checked = eventTypeItem === eventType ? 'checked' : '';
+
     return `<div class="event__type-item">
-            <input id="event-type-${eventTypeItem}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeItem}" ${checked}>
-            <label class="event__type-label  event__type-label--${eventTypeItem}" for="event-type-${eventTypeItem}-1">${eventTypeItem}</label>
-          </div>`;
+              <input id="event-type-${eventTypeItem}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeItem}" ${checked}>
+              <label class="event__type-label  event__type-label--${eventTypeItem}" for="event-type-${eventTypeItem}-1">${eventTypeItem}</label>
+            </div>`;
   }).join('');
 
   const startDate = dayjs();
@@ -80,7 +81,7 @@ class EventAddView {
 
   getElement() {
     if (!this._element) {
-      this._element  = createElement(this.getTemplate());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

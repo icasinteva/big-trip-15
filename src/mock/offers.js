@@ -7,9 +7,24 @@ const generateOffers = (destination, eventType) => {
   const eventTypeOffers = destinationOffers[eventType];
 
   if (eventTypeOffers && eventTypeOffers.length) {
-    eventTypeOffers.forEach((offer) => offer.selected = Boolean(getRandomInteger(0, 1)));
+    const cloneEventTypeOffers = eventTypeOffers.map((offer) => {
+      const clone = { ...offer };
 
-    return eventTypeOffers.filter(({ selected }) => selected);
+      clone.selected = Boolean(getRandomInteger(0, 1));
+
+      return clone;
+    });
+
+    const selectedEventOffers = [];
+
+    cloneEventTypeOffers.forEach((eventTypeOffer) => {
+      if (eventTypeOffer.selected) {
+        selectedEventOffers.push(eventTypeOffer);
+        delete eventTypeOffer.selected;
+      }
+    });
+
+    return selectedEventOffers;
   }
 
   return [];

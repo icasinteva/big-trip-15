@@ -1,11 +1,11 @@
-import { RenderPosition } from '../enums';
-import { renderNestedElement, createElement, createPriceTemplate } from '../utils';
+import { createElement, createPriceTemplate } from '../utils';
 
 
 const createOfferItemTemplate = ({
   title,
   id,
   selected,
+  price,
 }) => {
   const checked = selected ? 'checked' : '';
 
@@ -13,6 +13,7 @@ const createOfferItemTemplate = ({
   <input class="event__offer-checkbox  visually-hidden" id="${id}-1" type="checkbox" name=${id} ${checked}>
   <label class="event__offer-label" for="${id}-1">
     <span class="event__offer-title">${title}</span>
+    +${createPriceTemplate('event__offer-price ', price)}
   </label>
 </div>`;
 };
@@ -29,10 +30,7 @@ class OfferItemView {
 
   getElement() {
     if (!this._element) {
-      const priceElement = createElement(createPriceTemplate('event__offer-price ', this._offerData.price));
-
       this._element = createElement(this.getTemplate());
-      renderNestedElement(this._element.querySelector('.event__offer-label'), priceElement, RenderPosition.BEFOREEND);
     }
 
     return this._element;

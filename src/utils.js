@@ -197,6 +197,18 @@ const generateDestination = () => {
 const createPriceTemplate = (className, amount) =>
   `€&nbsp;<span class="${className}-value">${amount}</span>`;
 
+const remove = (elementToRemove) => {
+  elementToRemove.parentNode.removeChild(elementToRemove);
+};
+
+const onEscKeyDown = (evt, callback) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    evt.preventDefault();
+    callback();
+    document.removeEventListener('keydown', onEscKeyDown);
+  }
+};
+
 export {
   getRandomInteger,
   renderTemplate,
@@ -217,5 +229,7 @@ export {
   getDestinations,
   filterEvents,
   sortEvents,
-  createPriceTemplate
+  createPriceTemplate,
+  remove,
+  onEscKeyDown
 };
