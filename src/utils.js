@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { RenderPosition, EventType, Destination, Filter, Sorting } from './enums';
+import { RenderPosition, EventType, Destination, Filter, Sorting, Keydown } from './enums';
 
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -197,6 +197,18 @@ const generateDestination = () => {
 const createPriceTemplate = (className, amount) =>
   `€&nbsp;<span class="${className}-value">${amount}</span>`;
 
+const remove = (elementToRemove) => {
+  elementToRemove.parentNode.removeChild(elementToRemove);
+};
+
+const onEscKeyDown = (evt, callback) => {
+  if (evt.key === Keydown.ESCAPE) {
+    evt.preventDefault();
+    callback();
+    document.removeEventListener('keydown', onEscKeyDown);
+  }
+};
+
 export {
   getRandomInteger,
   renderTemplate,
@@ -217,5 +229,7 @@ export {
   getDestinations,
   filterEvents,
   sortEvents,
-  createPriceTemplate
+  createPriceTemplate,
+  remove,
+  onEscKeyDown
 };

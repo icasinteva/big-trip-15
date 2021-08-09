@@ -148,4 +148,8 @@ const DestinationData = {
   },
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData };
+const Keydown = {
+  ESCAPE: 'Escape',
+};
+
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown };
