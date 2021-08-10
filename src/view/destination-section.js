@@ -1,5 +1,6 @@
+import AbstractView from './abstract';
 import { RenderPosition } from '../enums';
-import { renderNestedElement, createElement } from '../utils';
+import { createElement, render } from '../utils/render';
 import GallerySectionView from './gallery-section';
 
 const createDescriptionSectionTemplate = (description = '') => {
@@ -11,11 +12,11 @@ const createDestinationSectionTemplate = () => `<section class="event__section  
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           </section>`;
 
-class DestinationSectionView {
+class DestinationSectionView extends AbstractView {
   constructor(description, photos) {
+    super();
     this._description = description;
     this._photos = photos;
-    this._element = null;
   }
 
   getTemplate() {
@@ -24,27 +25,23 @@ class DestinationSectionView {
 
   getElement() {
     if (!this._element) {
-      const gallerySectionComponent = new GallerySectionView(this._photos);
+      const arePhotosPresent = this._photos.length;
       const descriptionElement = createElement(createDescriptionSectionTemplate(this._description));
 
-      if (descriptionElement || gallerySectionComponent.getElement()) {
+      if (descriptionElement || arePhotosPresent) {
         this._element = createElement(this.getTemplate());
       }
 
       if (descriptionElement) {
-        renderNestedElement(this._element, descriptionElement, RenderPosition.BEFOREEND);
+        render(this._element, descriptionElement, RenderPosition.BEFOREEND);
       }
 
-      if (gallerySectionComponent.getElement()) {
-        renderNestedElement(this._element, gallerySectionComponent.getElement(), RenderPosition.BEFOREEND);
+      if (arePhotosPresent) {
+        render(this._element, new GallerySectionView(this._photos).getElement(), RenderPosition.BEFOREEND);
       }
     }
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,4 +1,4 @@
-import { createElement } from '../utils';
+import AbstractView from './abstract';
 import { Filter } from '../enums';
 
 const messages = {
@@ -9,26 +9,14 @@ const messages = {
 
 const createNoEventTemplate = (filter) => `<p class="trip-events__msg">${messages[filter]}</p>`;
 
-class NoEventsView {
-  constructor(filter) {
+class NoEventsView extends AbstractView {
+  constructor(filter = Filter.EVERYTHING) {
+    super();
     this._filter = filter;
-    this._element = null;
   }
 
   getTemplate() {
     return createNoEventTemplate(this._filter);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

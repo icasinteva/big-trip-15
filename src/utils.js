@@ -1,40 +1,5 @@
 import dayjs from 'dayjs';
-import { RenderPosition, EventType, Destination, Filter, Sorting, Keydown } from './enums';
-
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN: {
-      container.prepend(element);
-      break;
-    }
-    case RenderPosition.BEFOREEND: {
-      container.append(element);
-      break;
-    }
-    case RenderPosition.BEFOREBEGIN: {
-      container.parentNode.insertBefore(element, container);
-      break;
-    }
-  }
-};
-
-const renderNestedElement = (container, nestedElement, place) => {
-  if (nestedElement) {
-    render(container, nestedElement, place);
-  }
-};
-
-const createElement = (template) => {
-  const newElement = document.createElement('div');
-
-  newElement.innerHTML = template;
-
-  return newElement.firstElementChild;
-};
+import { EventType, Destination, Filter, Sorting, Keydown } from './enums';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -123,11 +88,13 @@ const sortEventsByDateUp = (events) => sortEventsByDate(events, sortDateUp);
 
 const sortEventsByTime = (events) =>
   events.sort((a, b) => {
-    if (
-      getDuration(a.startDate, a.endDate) > getDuration(b.startDate, b.endDate)
-    ) {
+    const durationA = a.endDate.diff(a.startDate);
+    const durationB = b.endDate.diff(b.startDate);
+
+    if (durationA > durationB) {
       return 1;
     }
+
     return -1;
   });
 
@@ -151,13 +118,19 @@ const getTripRange = (events) => {
   };
 };
 
-const getDestinations = (events) =>
-  Array.from(new Set(events.map(({ destination }) => destination)));
+const getDestinations = (events) => {
+  const start = events[0].destination;
+  const end = events[events.length - 1].destination;
+
+  return [ start, ...Array.from(new Set(events.slice(1, events.length - 1).map(({ destination }) => destination))), end];
+};
+
 
 const filterEvents = {
   [Filter.EVERYTHING]: (events) => events,
   [Filter.FUTURE]: (events) =>
     events.filter(({ startDate }) => startDate.isAfter(dayjs())),
+
   [Filter.PAST]: (events) =>
     events.filter(({ startDate }) => !startDate.isAfter(dayjs())),
 };
@@ -166,18 +139,6 @@ const sortEvents = {
   [Sorting.DAY]: sortEventsByDateUp,
   [Sorting.TIME]: sortEventsByTime,
   [Sorting.PRICE]: sortEventsByPrice,
-};
-
-const generateSorting = () => {
-  const sorting = Object.keys(Sorting);
-
-  return Sorting[sorting[getRandomInteger(0, sorting.length - 1)]];
-};
-
-const generateFilter = () => {
-  const filters = Object.keys(Filter);
-
-  return Filter[filters[getRandomInteger(0, filters.length - 1)]];
 };
 
 const generateEventType = () => {
@@ -194,13 +155,6 @@ const generateDestination = () => {
   ];
 };
 
-const createPriceTemplate = (className, amount) =>
-  `€&nbsp;<span class="${className}-value">${amount}</span>`;
-
-const remove = (elementToRemove) => {
-  elementToRemove.parentNode.removeChild(elementToRemove);
-};
-
 const onEscKeyDown = (evt, callback) => {
   if (evt.key === Keydown.ESCAPE) {
     evt.preventDefault();
@@ -211,25 +165,16 @@ const onEscKeyDown = (evt, callback) => {
 
 export {
   getRandomInteger,
-  renderTemplate,
-  createElement,
-  render,
-  renderNestedElement,
   generateDate,
   humanizeEventStartDate,
-  generateFilter,
-  generateSorting,
   getDuration,
   checkTag,
   calculateCost,
   getTripRange,
-  sortEventsByDateUp,
   generateEventType,
   generateDestination,
   getDestinations,
   filterEvents,
   sortEvents,
-  createPriceTemplate,
-  remove,
   onEscKeyDown
 };

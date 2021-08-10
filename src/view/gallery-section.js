@@ -1,4 +1,4 @@
-import { createElement } from '../utils';
+import AbstractView from './abstract';
 
 const createGallerySectionTemplate = (photos = []) => {
   const images = photos.map((photo) => `<img class="event__photo" src=${photo.src} alt="Event photo">`).join('');
@@ -10,26 +10,14 @@ const createGallerySectionTemplate = (photos = []) => {
             </div>`;
 };
 
-class GallerySectionView {
+class GallerySectionView extends AbstractView {
   constructor(photos = []) {
+    super();
     this._photos = photos;
-    this._element = null;
   }
 
   getTemplate() {
     return createGallerySectionTemplate(this._photos);
-  }
-
-  getElement() {
-    if (!this._element && this._photos.length) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
