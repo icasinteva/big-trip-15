@@ -56,13 +56,13 @@ const checkTag = (template, tagName) => {
   return htmlObject.tagName === tagName;
 };
 
-const calculateCost = (arr) =>
+const calculateTripCost = (arr) =>
   arr.reduce((acc, reducer) => {
     let offersCost = 0;
     const { price, offers } = reducer;
 
     if (offers) {
-      offersCost = calculateCost(offers);
+      offersCost = calculateTripCost(offers);
     }
 
     return acc + price + offersCost;
@@ -125,21 +125,13 @@ const getDestinations = (events) => {
   return [ start, ...Array.from(new Set(events.slice(1, events.length - 1).map(({ destination }) => destination))), end];
 };
 
+const filterEverything = (events) => events;
 
-const filterEvents = {
-  [Filter.EVERYTHING]: (events) => events,
-  [Filter.FUTURE]: (events) =>
-    events.filter(({ startDate }) => startDate.isAfter(dayjs())),
+const filterFutureEvents = (events) =>
+  events.filter(({ startDate }) => startDate.isAfter(dayjs()));
 
-  [Filter.PAST]: (events) =>
-    events.filter(({ startDate }) => !startDate.isAfter(dayjs())),
-};
-
-const sortEvents = {
-  [Sorting.DAY]: sortEventsByDateUp,
-  [Sorting.TIME]: sortEventsByTime,
-  [Sorting.PRICE]: sortEventsByPrice,
-};
+const filterPastEvents = (events) =>
+  events.filter(({ startDate }) => !startDate.isAfter(dayjs()));
 
 const generateEventType = () => {
   const eventTypes = Object.keys(EventType);
@@ -169,12 +161,16 @@ export {
   humanizeEventStartDate,
   getDuration,
   checkTag,
-  calculateCost,
+  calculateTripCost,
   getTripRange,
   generateEventType,
   generateDestination,
   getDestinations,
-  filterEvents,
-  sortEvents,
+  filterEverything,
+  filterFutureEvents,
+  filterPastEvents,
+  sortEventsByDateUp,
+  sortEventsByTime,
+  sortEventsByPrice,
   onEscKeyDown
 };

@@ -1,9 +1,8 @@
 import AbstractView from './abstract';
 import NoEventsView from './no-events';
 import EventsSortView from './events-sort';
-import { RenderPosition } from '../enums';
+import { RenderPosition, SortEventsTypeToMethod } from '../enums';
 import { createElement, render } from '../utils/render';
-import { sortEvents } from '../utils';
 import EventsListView from './events-list-section';
 
 
@@ -25,7 +24,7 @@ class BoardView extends AbstractView {
       this._element = createElement(this.getTemplate());
 
       if (this._events.length) {
-        const sortedEvents = this._sort ? sortEvents[this._sort](this._events): this._events;
+        const sortedEvents = this._sort ? SortEventsTypeToMethod[this._sort](this._events): this._events;
         const eventsListComponent = new EventsListView(sortedEvents);
         const eventsSortComponent = new EventsSortView(this._sort);
 
@@ -34,7 +33,9 @@ class BoardView extends AbstractView {
         render(this.getElement(), eventsSortComponent, RenderPosition.BEFOREEND);
         render(this.getElement(), eventsListComponent, RenderPosition.BEFOREEND);
       } else {
-        render(this.getElement(), new NoEventsView(), RenderPosition.BEFOREEND);
+        const selectedFilter = document.querySelector('.trip-filters__filter-input:checked').value;
+
+        render(this.getElement(), new NoEventsView(selectedFilter), RenderPosition.BEFOREEND);
       }
     }
     return this._element;

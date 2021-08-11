@@ -6,23 +6,18 @@ import AddEventButtonView from './view/add-event-button';
 import EventsListView from './view/events-list-section';
 import EventsListItemView from './view/events-list-item';
 import EventAddView from './view/event-add';
-import EventDetailsView from './view/event-details-section';
 import BoardView from './view/board';
 import { generateEvent } from './mock/event';
-import { RenderPosition } from './enums';
+import { RenderPosition, FilterEventsTypeToMethod, SortEventsTypeToMethod } from './enums';
 import { DEFAULT_FILTER, DEFAULT_SORTING } from './const';
-import {
-  filterEvents,
-  sortEvents,
-  onEscKeyDown
-} from './utils';
-import { render, remove } from './utils/render';
+import { onEscKeyDown } from './utils';
+import { render, remove, renderEventDetailsSection } from './utils/render';
 
-const EVENTS_COUNT = 10;
+const EVENTS_COUNT = 20;
 const events = new Array(EVENTS_COUNT).fill().map(generateEvent);
 
-const filter = () => filterEvents[DEFAULT_FILTER](events);
-const selectedSortingMethod = sortEvents[DEFAULT_SORTING];
+const filter = () => FilterEventsTypeToMethod[DEFAULT_FILTER](events);
+const selectedSortingMethod = SortEventsTypeToMethod[DEFAULT_SORTING];
 
 const filteredEvents = filter();
 const sortedEvents = selectedSortingMethod(filteredEvents);
@@ -51,13 +46,6 @@ const renderAddEventForm = (listContainer) => {
     }
 
     addEventButtonComponent.toggleDisabled();
-  };
-
-  const renderEventDetailsSection = (container, data) => {
-    const eventDetailsComponent = new EventDetailsView(data);
-
-    remove(eventAddComponent.queryChildElement('.event__details'));
-    render(container, eventDetailsComponent, RenderPosition.BEFOREEND);
   };
 
   render(eventListItemComponent, eventAddComponent, RenderPosition.AFTERBEGIN);

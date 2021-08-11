@@ -1,6 +1,5 @@
 import AbstractView from './abstract';
-import { RenderPosition, Sorting } from '../enums';
-import { sortEvents } from '../utils';
+import { RenderPosition, Sorting, SortEventsTypeToMethod } from '../enums';
 import { render, remove } from '../utils/render';
 import BoardView from './board';
 import TripInfoView from './trip-info';
@@ -66,7 +65,7 @@ class EventsSortView extends AbstractView {
   }
 
   setSortEventsListeners(events) {
-    Object.entries(sortEvents).forEach(([sort, callback]) => {
+    Object.entries(SortEventsTypeToMethod).forEach(([sort, callback]) => {
       this._callback[sort] = callback;
       this.queryChildElement(`#sort-${sort}`).addEventListener('click', () => {
         const tripInfoComponent = document.querySelector('.trip-info');

@@ -1,4 +1,6 @@
 import { generatePhotos } from './mock/photos';
+import { filterEverything, filterFutureEvents, filterPastEvents } from './utils';
+import { sortEventsByDateUp, sortEventsByTime, sortEventsByPrice } from './utils';
 
 const RenderPosition = {
   AFTERBEGIN: 'afterBegin',
@@ -152,4 +154,16 @@ const Keydown = {
   ESCAPE: 'Escape',
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown };
+const FilterEventsTypeToMethod = {
+  [Filter.EVERYTHING]: filterEverything,
+  [Filter.FUTURE]: filterFutureEvents,
+  [Filter.PAST]: filterPastEvents,
+};
+
+const SortEventsTypeToMethod = {
+  [Sorting.DAY]: sortEventsByDateUp,
+  [Sorting.TIME]: sortEventsByTime,
+  [Sorting.PRICE]: sortEventsByPrice,
+};
+
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown, FilterEventsTypeToMethod, SortEventsTypeToMethod };

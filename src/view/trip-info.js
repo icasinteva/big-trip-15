@@ -1,11 +1,11 @@
 import { createElement, createPriceTemplate } from '../utils/render';
-import { getTripRange, getDestinations, calculateCost } from '../utils';
+import { getTripRange, getDestinations, calculateTripCost } from '../utils';
 import AbstractView from './abstract';
 
 const createTripInfoTemplate = (events) => {
   const { startDate, endDate } = getTripRange(events);
   const destinations = getDestinations(events);
-  const price = calculateCost(events);
+  const price = calculateTripCost(events);
 
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
