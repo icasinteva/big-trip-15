@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { EventType, Destination, Filter, Sorting, Keydown } from './enums';
+import { EventType, Destination, Keydown } from './enums';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
