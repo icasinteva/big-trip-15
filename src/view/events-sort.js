@@ -1,5 +1,8 @@
-import { createElement } from '../utils';
-import { Sorting } from '../enums';
+import AbstractView from './abstract';
+import { RenderPosition, Sorting, SortEventsTypeToMethod } from '../enums';
+import { render, remove } from '../utils/render';
+import BoardView from './board';
+import TripInfoView from './trip-info';
 
 const createEventsSortTemplate = (selected = Sorting.DAY) => {
   const sort = {
@@ -46,25 +49,35 @@ const createEventsSortTemplate = (selected = Sorting.DAY) => {
           </form>`;
 };
 
-class EventsSortView {
-  constructor(selectedSorting) {
+class EventsSortView extends AbstractView {
+  constructor(selectedSorting = Sorting.DAY) {
+    super();
     this._selectedSorting = selectedSorting;
+    this._sortEventListeners = this._sortEventListeners.bind(this);
   }
 
   getTemplate() {
     return createEventsSortTemplate(this._selectedSorting);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _sortEventListeners(filter, events) {
+    return this._callback[filter](events);
   }
 
-  removeElement() {
-    this._element = null;
+  setSortEventsListeners(events) {
+    Object.entries(SortEventsTypeToMethod).forEach(([sort, callback]) => {
+      this._callback[sort] = callback;
+      this.queryChildElement(`#sort-${sort}`).addEventListener('click', () => {
+        const tripInfoComponent = document.querySelector('.trip-info');
+        const boardComponent = document.querySelector('.trip-events');
+        const sortedEvents = this._sortEventListeners(sort, events);
+
+        remove(tripInfoComponent);
+        remove(boardComponent);
+        render(document.querySelector('.trip-main'), new TripInfoView(sortedEvents), RenderPosition.AFTERBEGIN);
+        render(document.querySelector('.page-main .page-body__container'), new BoardView(sortedEvents, sort), RenderPosition.BEFOREEND);
+      });
+    });
   }
 }
 export default EventsSortView;

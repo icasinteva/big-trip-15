@@ -1,4 +1,5 @@
-import { createElement, createPriceTemplate } from '../utils';
+import AbstractView from './abstract';
+import { createPriceTemplate } from '../utils/render';
 
 
 const createOfferItemTemplate = ({
@@ -18,26 +19,14 @@ const createOfferItemTemplate = ({
 </div>`;
 };
 
-class OfferItemView {
+class OfferItemView extends AbstractView {
   constructor(offerData) {
+    super();
     this._offerData = offerData;
-    this._element = null;
   }
 
   getTemplate() {
     return createOfferItemTemplate(this._offerData);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 export default OfferItemView;

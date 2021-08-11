@@ -1,5 +1,6 @@
+import AbstractView from './abstract';
 import { RenderPosition, EventType, Destination } from '../enums';
-import { renderNestedElement, createElement } from '../utils';
+import { createElement, render} from '../utils/render';
 import EventDetailsView from './event-details-section';
 
 const createEventEditTemplate = (event) => {
@@ -70,10 +71,12 @@ const createEventEditTemplate = (event) => {
           </form>`;
 };
 
-class EventEditView {
+class EventEditView extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
+    this._exitEditModeListener = this._exitEditModeListener.bind(this);
+    this._saveChangesListener = this._saveChangesListener.bind(this);
   }
 
   getTemplate() {
@@ -84,7 +87,7 @@ class EventEditView {
     if (!this._element) {
       this._element  = createElement(this.getTemplate());
 
-      renderNestedElement(this._element, new EventDetailsView(this._event).getElement(), RenderPosition.BEFOREEND);
+      render(this._element, new EventDetailsView(this._event).getElement(), RenderPosition.BEFOREEND);
 
       this._element.querySelectorAll('.event__type-input').forEach((eventTypeInput) => eventTypeInput.addEventListener('click', (evt) => {
         this._element.querySelector('.event__type-output').textContent = evt.target.value;
@@ -96,8 +99,24 @@ class EventEditView {
     return this._element;
   }
 
-  removeElement() {
-    this._element = null;
+  _exitEditModeListener(evt) {
+    evt.preventDefault();
+    this._callback.exitEditMode();
+  }
+
+  _saveChangesListener(evt) {
+    evt.preventDefault();
+    this._callback.saveChanges();
+  }
+
+  setExitEditModeListener(callback) {
+    this._callback.exitEditMode = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._exitEditModeListener);
+  }
+
+  setSaveChangesListener(callback) {
+    this._callback.saveChanges = callback;
+    this.getElement().addEventListener('submit', this._saveChangesListener);
   }
 }
 export default EventEditView;

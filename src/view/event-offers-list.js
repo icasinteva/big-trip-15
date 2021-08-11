@@ -1,5 +1,7 @@
+import AbstractView from './abstract';
 import { RenderPosition } from '../enums';
-import { renderNestedElement, createElement, createPriceTemplate } from '../utils';
+import { render, createElement } from '../utils/render';
+import { createPriceTemplate } from '../utils/render';
 
 const createEventOfferTemplate = ({ title, price }) => `<li class="event__offer">
                                                           <span class="event__offer-title">${title}</span>
@@ -8,10 +10,10 @@ const createEventOfferTemplate = ({ title, price }) => `<li class="event__offer"
 
 const createEventOfferListTemplate = () => '<ul class="event__selected-offers"></ul>';
 
-class EventOffersListView {
+class EventOffersListView extends AbstractView {
   constructor(offers) {
+    super();
     this._offers = offers;
-    this._element = null;
   }
 
   getTemplate() {
@@ -24,15 +26,11 @@ class EventOffersListView {
       this._offers.forEach((offer) => {
         const eventOfferElement = createElement(createEventOfferTemplate(offer));
 
-        renderNestedElement(this._element, eventOfferElement, RenderPosition.BEFOREEND);
+        render(this._element, eventOfferElement, RenderPosition.BEFOREEND);
       });
     }
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

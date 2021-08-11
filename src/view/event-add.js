@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
+import AbstractView from './abstract';
 import { EventType, Destination } from '../enums';
-import { createElement } from '../utils';
 
 const createEventAddTemplate = () => {
   const eventType = Object.values(EventType)[0];
@@ -69,26 +69,80 @@ const createEventAddTemplate = () => {
           </form>`;
 };
 
-class EventAddView {
+class EventAddView extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
+    this._changeEventTypeListener = this._changeEventTypeListener.bind(this);
+    this._changeDestinationListener = this._changeDestinationListener.bind(this);
+    this._cancelListener = this._cancelListener.bind(this);
+    this._saveChangesListener = this._saveChangesListener.bind(this);
   }
 
   getTemplate() {
     return createEventAddTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
+  get eventType() {
+    if (!this._evenType) {
+      this._eventType = this.queryChildElement('.event__type-input:checked').value || '';
     }
 
-    return this._element;
+    return this._eventType;
   }
 
-  removeElement() {
-    this._element = null;
+  get destination() {
+    if (!this._destination) {
+      this._destination = this.queryChildElement('.event__input--destination').value || '';
+    }
+
+    return this._destination;
+  }
+
+  _changeEventTypeListener(evt) {
+    this._callback.changeEventType(evt);
+  }
+
+  _changeDestinationListener(evt) {
+    this._callback.changeDestination(evt);
+  }
+
+  _cancelListener(evt) {
+    evt.preventDefault();
+    this._callback.cancel();
+  }
+
+  _saveChangesListener(evt) {
+    evt.preventDefault();
+    this._callback.saveChanges();
+  }
+
+  setChangeEventTypeListener(callback) {
+    this._callback.changeEventType = callback;
+    this.queryChildElements('.event__type-input').forEach((eventTypeInput) => eventTypeInput.addEventListener('change', this._changeEventTypeListener));
+  }
+
+  setChangeDestinationListener(callback) {
+    this._callback.changeDestination = callback;
+    this.queryChildElement('.event__input--destination').addEventListener('change', this._changeDestinationListener);
+  }
+
+  setCancelListener(callback) {
+    this._callback.cancel = callback;
+    this.queryChildElement('.event__reset-btn').addEventListener('click', this._cancelListener);
+  }
+
+  setSaveChangesListener(callback) {
+    this._callback.saveChanges = callback;
+    this.getElement().addEventListener('submit', this._saveChangesListener);
+  }
+
+  changeEventType(value) {
+    const eventTypeIconElement = this.queryChildElement('.event__type-icon');
+
+    eventTypeIconElement.src = eventTypeIconElement.getAttribute('src').replace(/(img\/icons\/)[a-z]+(-[a-z]+){0,}/, `$1${value}`);
+    this.queryChildElement('.event__type-output').textContent = value;
+    this.queryChildElement('.event__type-toggle').checked = false;
   }
 }
 export default EventAddView;

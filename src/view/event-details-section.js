@@ -1,14 +1,15 @@
-import { renderNestedElement, createElement } from '../utils';
+import AbstractView from './abstract';
+import { createElement, render } from '../utils/render';
 import { RenderPosition, DestinationData } from '../enums';
 import DestinationSectionView from './destination-section';
 import OffersSectionView from './offers-section';
 
 
 const createEventDetailsTemaplate = () => '<section class="event__details"></section>';
-class EventDetailsView {
+class EventDetailsView extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
@@ -49,17 +50,13 @@ class EventDetailsView {
 
         if (offersSectionComponent.getElement() || destinationSectionComponent.getElement()) {
           this._element = createElement(this.getTemplate());
-          renderNestedElement(this._element, offersSectionComponent.getElement(), RenderPosition.BEFOREEND);
-          renderNestedElement(this._element, destinationSectionComponent.getElement(), RenderPosition.BEFOREEND);
+          render(this._element, offersSectionComponent.getElement(), RenderPosition.BEFOREEND);
+          render(this._element, destinationSectionComponent.getElement(), RenderPosition.BEFOREEND);
         }
       }
     }
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

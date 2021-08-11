@@ -1,5 +1,7 @@
+import AbstractView from './abstract';
 import EventOffersListView from './event-offers-list';
-import { renderNestedElement, createElement, getDuration, humanizeEventStartDate, createPriceTemplate } from '../utils';
+import { render, createElement, createPriceTemplate } from '../utils/render';
+import { getDuration, humanizeEventStartDate } from '../utils';
 import { RenderPosition } from '../enums';
 
 const createEventTemplate = (event) => {
@@ -43,10 +45,11 @@ const createEventTemplate = (event) => {
               </div>`;
 };
 
-class EventView {
+class EventView extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
+    this._editEventListener = this._editEventListener.bind(this);
   }
 
   getTemplate() {
@@ -58,14 +61,20 @@ class EventView {
       const { offers } = this._event;
 
       this._element = createElement(this.getTemplate());
-      renderNestedElement(this._element.querySelector('button.event__favorite-btn'), new EventOffersListView(offers).getElement(), RenderPosition.BEFOREBEGIN);
+      render(this._element.querySelector('button.event__favorite-btn'), new EventOffersListView(offers).getElement(), RenderPosition.BEFOREBEGIN);
     }
 
     return this._element;
   }
 
-  removeElement() {
-    this._element = null;
+  _editEventListener(evt) {
+    evt.preventDefault();
+    this._callback.editEvent();
+  }
+
+  setEditEventListener(callback) {
+    this._callback.editEvent = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editEventListener);
   }
 }
 export default EventView;

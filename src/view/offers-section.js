@@ -1,5 +1,6 @@
+import AbstractView from './abstract';
 import { RenderPosition } from '../enums';
-import { renderNestedElement, createElement } from '../utils';
+import { createElement, render } from '../utils/render';
 import OfferItemView from './offer-item';
 
 const createOffersSectionTemplate = () => `<section class="event__section  event__section--offers">
@@ -7,10 +8,10 @@ const createOffersSectionTemplate = () => `<section class="event__section  event
                     <div class="event__available-offers"></div>
                   </section>`;
 
-class OffersSectionView {
+class OffersSectionView extends AbstractView {
   constructor(offers = []) {
+    super();
     this._offers = offers;
-    this._element = null;
   }
 
   getTemplate() {
@@ -20,14 +21,10 @@ class OffersSectionView {
   getElement() {
     if (!this._element && this._offers.length) {
       this._element = createElement(this.getTemplate());
-      this._offers.forEach((offer) => renderNestedElement(this._element.querySelector('.event__available-offers'), new OfferItemView(offer).getElement(), RenderPosition.BEFOREEND));
+      this._offers.forEach((offer) => render(this._element.querySelector('.event__available-offers'), new OfferItemView(offer).getElement(), RenderPosition.BEFOREEND));
     }
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
