@@ -1,5 +1,5 @@
 import { createElement, createPriceTemplate } from '../utils/render';
-import { getTripRange, getDestinations, calculateTripCost } from '../utils';
+import { calculateTripCost, getTripRange, getDestinations } from '../utils/trip-info';
 import AbstractView from './abstract';
 
 const createTripInfoTemplate = (events) => {

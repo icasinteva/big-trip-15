@@ -1,4 +1,6 @@
-import { getRandomInteger, generateDate, generateEventType, generateDestination } from '../utils';
+import { nanoid } from 'nanoid';
+import { getRandomInteger } from '../utils/common';
+import { generateDate, generateEventType, generateDestination } from '../utils/event';
 import { generateOffers } from './offers';
 
 const generateEvent = () => {
@@ -15,7 +17,7 @@ const generateEvent = () => {
     startDate,
     endDate,
     destination,
-    id: '0',
+    id: nanoid(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     offers: generateOffers(destination, eventType),
     eventType,

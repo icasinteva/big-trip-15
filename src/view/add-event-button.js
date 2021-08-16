@@ -10,25 +10,25 @@ const createAddEventButtonTemplate = () => `<button
 class AddEventButtonView extends AbstractView {
   constructor() {
     super();
-    this._enterAddModeListener = this._enterAddModeListener.bind(this);
+    this._enterAddModeHandler = this._enterAddModeHandler.bind(this);
   }
 
   getTemplate() {
     return createAddEventButtonTemplate();
   }
 
-  _enterAddModeListener(evt) {
+  _enterAddModeHandler(evt) {
     evt.preventDefault();
     this._callback.enterAddMode();
   }
 
-  setEnterAddModeListener(callback) {
+  setEnterAddModeHandler(callback) {
     this._callback.enterAddMode = callback;
-    this.getElement().addEventListener('click', this._enterAddModeListener);
+    this.getElement().addEventListener('click', this._enterAddModeHandler);
   }
 
-  toggleDisabled() {
-    this.getElement().disabled = !this.getElement().disabled;
+  setDisabled(disabled) {
+    this.getElement().disabled = disabled;
   }
 }
 

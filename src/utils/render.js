@@ -36,35 +36,40 @@ const render = (container, child, place) => {
   }
 };
 
-const replace = (container, child1, child2) => {
-  if (container instanceof AbstractView) {
-    container = container.getElement();
+const replace = (newChild, oldChild) => {
+  if (oldChild instanceof AbstractView) {
+    oldChild = oldChild.getElement();
   }
 
-  if (child1 instanceof AbstractView) {
-    child1 = child1.getElement();
+  if (newChild instanceof AbstractView) {
+    newChild = newChild.getElement();
   }
 
-  if (child2 instanceof AbstractView) {
-    child2 = child2.getElement();
+  const parent = oldChild.parentElement;
+
+  if (parent === null || oldChild === null || newChild === null) {
+    throw new Error('Can\'t replace unexisting elements');
   }
-  container.replaceChild(child1, child2);
+
+  parent.replaceChild(newChild, oldChild);
 };
 
-const remove = (elementToRemove) => {
-  if (!elementToRemove) {
-    return false;
+const remove = (component) => {
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
   }
 
-  if (elementToRemove instanceof AbstractView) {
-    elementToRemove = elementToRemove.getElement();
-  }
-
-  elementToRemove.parentNode.removeChild(elementToRemove);
+  component.getElement().remove();
+  component.removeElement();
 };
 
 const createPriceTemplate = (className, amount) =>
   `€&nbsp;<span class="${className}-value">${amount}</span>`;
 
+const renderEventDetailsSection = (container, eventDetailsComponent) => {
+  remove(container.queryChildElement('.event__details'));
+  render(container, eventDetailsComponent, RenderPosition.BEFOREEND);
+};
 
-export {createElement, render, replace, remove, createPriceTemplate};
+
+export {createElement, render, replace, remove, createPriceTemplate, renderEventDetailsSection};
