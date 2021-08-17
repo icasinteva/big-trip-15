@@ -1,8 +1,5 @@
 import AbstractView from './abstract';
-import { RenderPosition, Filter, Sorting, FilterEventsTypeToMethod } from '../enums';
-import { render, remove } from '../utils/render';
-import BoardView from './board';
-import TripInfoView from './trip-info';
+import { Filter, FilterEventsTypeToMethod } from '../enums';
 
 const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
   const filters = {
@@ -52,21 +49,10 @@ class EventsFiltersView extends AbstractView {
     return this._callback[filter](events);
   }
 
-  setFilterEventsListeners(events) {
+  setFilterEventsListeners() {
     Object.entries(FilterEventsTypeToMethod).forEach(([filter, callback]) => {
       this._callback[filter] = callback;
-      this.queryChildElement(`#filter-${filter}`).addEventListener('change', () => {
-        const tripInfoComponent = document.querySelector('.trip-info');
-        const boardComponent = document.querySelector('.trip-events');
-        const sortElement = boardComponent.querySelector('.trip-sort__input:checked');
-        const sort = sortElement ? sortElement.value.replace('sort-', '') : Sorting.DAY;
-        const filteredEvents = this._filterEventListeners(filter, events);
-
-        remove(tripInfoComponent);
-        remove(boardComponent);
-        render(document.querySelector('.trip-main'), new TripInfoView(filteredEvents), RenderPosition.AFTERBEGIN);
-        render(document.querySelector('.page-main .page-body__container'), new BoardView(filteredEvents, sort), RenderPosition.BEFOREEND);
-      });
+      this.queryChildElement(`#filter-${filter}`).addEventListener('change', () => {});
     });
   }
 }

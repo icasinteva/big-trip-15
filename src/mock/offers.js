@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils';
+import { getRandomInteger } from '../utils/common';
 import { DestinationData } from '../enums';
 
 const generateOffers = (destination, eventType) => {

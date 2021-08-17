@@ -1,7 +1,8 @@
 import AbstractView from './abstract';
 import EventOffersListView from './event-offers-list';
 import { render, createElement, createPriceTemplate } from '../utils/render';
-import { getDuration, humanizeEventStartDate } from '../utils';
+import { humanizeEventStartDate } from '../utils/common';
+import { getDuration } from '../utils/event';
 import { RenderPosition } from '../enums';
 
 const createEventTemplate = (event) => {
@@ -49,7 +50,8 @@ class EventView extends AbstractView {
   constructor(event) {
     super();
     this._event = event;
-    this._editEventListener = this._editEventListener.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -67,14 +69,24 @@ class EventView extends AbstractView {
     return this._element;
   }
 
-  _editEventListener(evt) {
+  _editClickHandler(evt) {
     evt.preventDefault();
-    this._callback.editEvent();
+    this._callback.editClick();
   }
 
-  setEditEventListener(callback) {
-    this._callback.editEvent = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editEventListener);
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setEditClickHanlder(callback) {
+    this._callback.editClick = callback;
+    this.queryChildElement('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.queryChildElement('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
   }
 }
 export default EventView;
