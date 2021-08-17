@@ -91,17 +91,6 @@ class Trip {
       this._removeAddEventForm(eventListItemComponent);
     });
     this._eventAddComponent.setSaveClickHandler(this._handleEventAdd);
-    /*eventAddComponent.setChangeDestinationListener(({ target: { value } }) => {
-      const eventDetailsComponent = new EventDetailsView({ destination: value, eventType: eventAddComponent.eventType });
-
-      renderEventDetailsSection(eventAddComponent, eventDetailsComponent);
-    });
-    eventAddComponent.setChangeEventTypeListener(({ target: { value } }) => {
-      const eventDetailsComponent = new EventDetailsView({ destination: eventAddComponent.destination, eventType: value});
-
-      eventAddComponent.changeEventType(value);
-      renderEventDetailsSection(eventAddComponent, eventDetailsComponent);
-    });*/
 
     document.addEventListener('keydown', (evt) => onEscKeyDown(evt, () => {
       this._removeAddEventForm(eventListItemComponent);

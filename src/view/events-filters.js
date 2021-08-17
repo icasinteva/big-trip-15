@@ -52,18 +52,7 @@ class EventsFiltersView extends AbstractView {
   setFilterEventsListeners() {
     Object.entries(FilterEventsTypeToMethod).forEach(([filter, callback]) => {
       this._callback[filter] = callback;
-      this.queryChildElement(`#filter-${filter}`).addEventListener('change', () => {
-        /*const tripInfoComponent = document.querySelector('.trip-info');
-        const boardComponent = document.querySelector('.trip-events');
-        const sortElement = boardComponent.querySelector('.trip-sort__input:checked');
-        const sort = sortElement ? sortElement.value.replace('sort-', '') : Sorting.DAY;
-        const filteredEvents = this._filterEventListeners(filter, events);
-
-        remove(tripInfoComponent);
-        remove(boardComponent);
-        render(document.querySelector('.trip-main'), new TripInfoView(filteredEvents), RenderPosition.AFTERBEGIN);
-        render(document.querySelector('.page-main .page-body__container'), new BoardView(filteredEvents, sort), RenderPosition.BEFOREEND);*/
-      });
+      this.queryChildElement(`#filter-${filter}`).addEventListener('change', () => {});
     });
   }
 }

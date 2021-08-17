@@ -1,6 +1,5 @@
 import { generatePhotos } from './mock/photos';
-import { filterEverything, filterFutureEvents, filterPastEvents } from './utils/common';
-import { sortEventsByDateUp, sortEventsByTime, sortEventsByPrice } from './utils/common';
+import { filterEverything, filterFutureEvents, filterPastEvents, sortEventsByDateUp, sortEventsByTime, sortEventsByPrice } from './utils/common';
 
 const RenderPosition = {
   AFTERBEGIN: 'afterBegin',
