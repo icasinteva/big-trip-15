@@ -6,20 +6,18 @@ import EventsListItemView from '../view/events-list-item';
 import EventAddView from '../view/event-add';
 import NoEventsView from '../view/no-events';
 import AddEventButtonView from '../view/add-event-button';
-import { RenderPosition, SortEventsTypeToMethod } from '../enums';
-import { render, remove } from '../utils/render.js';
+import { Filter, Sorting, RenderPosition, SortEventsTypeToMethod } from '../enums';
+import { render, remove, replace } from '../utils/render.js';
 import { onEscKeyDown, addItem, deleteItem, updateItem, contains} from '../utils/common';
-import { Sorting } from '../enums';
-
 class Trip {
-  constructor(pageContainer, sort, filter) {
-    this._sort = sort || Sorting.DAY;
-    this._filter = filter;
+  constructor(pageContainer) {
+    this._sortType = Sorting.DAY;
+    this._filter = Filter.EVERYTHING;
     this._eventPresenter = new Map();
     this._headerElement = pageContainer.querySelector('.page-header .trip-main');
     this._tripContainer = pageContainer.querySelector('.page-main .page-body__container');
     this._boardComponent = new BoardView();
-    this._eventsSortComponent = new EventsSortView(this._sort);
+    this._eventsSortComponent = null;
     this._eventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView(this._filter);
     this._addEventButtonComponent = new AddEventButtonView();
@@ -31,6 +29,7 @@ class Trip {
     this._handleEventDelete = this._handleEventDelete.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleEnterAddMode = this._handleEnterAddMode.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(events) {
@@ -76,6 +75,13 @@ class Trip {
     this._addEventButtonComponent.setDisabled(true);
   }
 
+  _handleSortTypeChange(sortType) {
+    if (this._sortType !== sortType) {
+      this._sortType = sortType;
+      this._reRenderEventsList();
+    }
+  }
+
   _renderAddEventButton() {
     this._addEventButtonComponent.setEnterAddModeHandler(this._handleEnterAddMode);
     render(this._headerElement, this._addEventButtonComponent, RenderPosition.BEFOREEND);
@@ -110,7 +116,17 @@ class Trip {
   }
 
   _renderSort() {
-    render(this._boardComponent, this._eventsSortComponent, RenderPosition.BEFOREEND);
+    const prevEventSortComponent = this._eventsSortComponent;
+
+    this._eventsSortComponent = new EventsSortView(this._sortType);
+
+    if (!prevEventSortComponent) {
+      render(this._boardComponent, this._eventsSortComponent, RenderPosition.BEFOREEND);
+    } else {
+      replace(this._eventsSortComponent, prevEventSortComponent);
+    }
+
+    this._eventsSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderEvent(event) {
@@ -125,7 +141,7 @@ class Trip {
   }
 
   _renderEventsList() {
-    const sortedEvents = SortEventsTypeToMethod[this._sort](this._events);
+    const sortedEvents = SortEventsTypeToMethod[this._sortType](this._events);
 
     sortedEvents.forEach((eventsItem) => this._renderEvent(eventsItem));
     render(this._boardComponent, this._eventsListComponent, RenderPosition.BEFOREEND);
