@@ -1,14 +1,10 @@
 import AbstractView from './abstract';
-import { RenderPosition, Sorting, SortEventsTypeToMethod } from '../enums';
-import { render, remove } from '../utils/render';
-import BoardView from './board';
-import TripInfoView from './trip-info';
+import { Sorting } from '../enums';
 
 const createEventsSortTemplate = (selected = Sorting.DAY) => {
   const sort = {
     [Sorting.DAY]: {
       disabled: false,
-      checked: true,
     },
     [Sorting.EVENT]: {
       disabled: true,
@@ -30,7 +26,6 @@ const createEventsSortTemplate = (selected = Sorting.DAY) => {
     sort[selected].checked = true;
   }
 
-
   const sortingItems = Object.entries(sort)
     .map(
       ([key, value]) => {
@@ -38,46 +33,49 @@ const createEventsSortTemplate = (selected = Sorting.DAY) => {
         const disabled = value.disabled ? 'disabled' : '';
 
         return `<div class="trip-sort__item  trip-sort__item--${key}">
-              <input id="sort-${key}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${key}" ${checked} ${disabled}>
-              <label class="trip-sort__btn" for="sort-${key}">${key}</label>
-            </div>`;
+                  <input id="sort-${key}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" data-sort-type=${key} value="sort-${key}" ${checked} ${disabled}>
+                  <label class="trip-sort__btn" for="sort-${key}">${key}</label>
+                </div>`;
       })
     .join('');
 
-  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-            ${sortingItems}
-          </form>`;
+  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${sortingItems}</form>`;
 };
 
 class EventsSortView extends AbstractView {
-  constructor(selectedSorting = Sorting.DAY) {
+  constructor(selectedSortType = Sorting.DAY) {
     super();
-    this._selectedSorting = selectedSorting;
-    this._sortEventListeners = this._sortEventListeners.bind(this);
+    this._selectedSortType = selectedSortType;
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+  }
+
+  get selectedSortType() {
+    return this._selectedSortType;
+  }
+
+  set selectedSortType(sortType) {
+    this._selectedSortType = sortType;
   }
 
   getTemplate() {
-    return createEventsSortTemplate(this._selectedSorting);
+    return createEventsSortTemplate(this._selectedSortType);
   }
 
-  _sortEventListeners(filter, events) {
-    return this._callback[filter](events);
+  _sortTypeChangeHandler(evt) {
+    const { target } = evt;
+    const {tagName, dataset} = target;
+
+    if (tagName !== 'INPUT') {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeChange(dataset.sortType);
   }
 
-  setSortEventsListeners(events) {
-    Object.entries(SortEventsTypeToMethod).forEach(([sort, callback]) => {
-      this._callback[sort] = callback;
-      this.queryChildElement(`#sort-${sort}`).addEventListener('click', () => {
-        const tripInfoComponent = document.querySelector('.trip-info');
-        const boardComponent = document.querySelector('.trip-events');
-        const sortedEvents = this._sortEventListeners(sort, events);
-
-        remove(tripInfoComponent);
-        remove(boardComponent);
-        render(document.querySelector('.trip-main'), new TripInfoView(sortedEvents), RenderPosition.AFTERBEGIN);
-        render(document.querySelector('.page-main .page-body__container'), new BoardView(sortedEvents, sort), RenderPosition.BEFOREEND);
-      });
-    });
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }
 export default EventsSortView;
