@@ -1,5 +1,5 @@
 import AbstractView from './abstract';
-import { Filter, FilterEventsTypeToMethod } from '../enums';
+import { Filter } from '../enums';
 
 const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
   const filters = {
@@ -22,38 +22,55 @@ const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
         const checked = value.checked ? 'checked' : '';
 
         return `<div class="trip-filters__filter">
-                  <input id="filter-${key}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value=${key} ${checked}>
+                  <input id="filter-${key}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" data-filter-type=${key} value=${key} ${checked}>
                   <label class="trip-filters__filter-label" for="filter-${key}">${key}</label>
                 </div>`;
       },
     )
     .join('');
 
-  return `<form class="trip-filters" action="#" method="get">
-                ${filterItems}
-                <button class="visually-hidden" type="submit">Accept filter</button>
-              </form>`;
+  return `<div class="trip-controls__filters">
+            <h2 class="visually-hidden">Filter events</h2>
+            <form class="trip-filters" action="#" method="get">
+              ${filterItems}
+              <button class="visually-hidden" type="submit">Accept filter</button>
+            </form>
+          </div>`;
 };
 class EventsFiltersView extends AbstractView {
   constructor(selectedFilter = Filter.EVERYTHING) {
     super();
     this._selectedFilter = selectedFilter;
-    this._filterEventListeners = this._filterEventListeners.bind(this);
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+  }
+
+  get selectedFilterType() {
+    return this._selectedFilterType;
+  }
+
+  set selectedFilterType(filterType) {
+    this._selectedFilterType = filterType;
   }
 
   getTemplate() {
     return createFiltersTemplate(this._selectedFilter);
   }
 
-  _filterEventListeners(filter, events) {
-    return this._callback[filter](events);
+  _filterTypeChangeHandler(evt) {
+    const { target } = evt;
+    const { tagName, dataset } = target;
+
+    if (tagName !== 'INPUT') {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.filterTypeChange(dataset.filterType);
   }
 
-  setFilterEventsListeners() {
-    Object.entries(FilterEventsTypeToMethod).forEach(([filter, callback]) => {
-      this._callback[filter] = callback;
-      this.queryChildElement(`#filter-${filter}`).addEventListener('change', () => {});
-    });
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().addEventListener('change', this._filterTypeChangeHandler);
   }
 }
 

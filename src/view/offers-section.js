@@ -9,9 +9,10 @@ const createOffersSectionTemplate = () => `<section class="event__section  event
                   </section>`;
 
 class OffersSectionView extends AbstractView {
-  constructor(offers = []) {
+  constructor(offers = [], offersChangeHandler) {
     super();
     this._offers = offers;
+    this._offersChangeHandler = offersChangeHandler;
   }
 
   getTemplate() {
@@ -21,7 +22,7 @@ class OffersSectionView extends AbstractView {
   getElement() {
     if (!this._element && this._offers.length) {
       this._element = createElement(this.getTemplate());
-      this._offers.forEach((offer) => render(this._element.querySelector('.event__available-offers'), new OfferItemView(offer).getElement(), RenderPosition.BEFOREEND));
+      this._offers.forEach((offer) => render(this._element.querySelector('.event__available-offers'), new OfferItemView(offer, this._offersChangeHandler).getElement(), RenderPosition.BEFOREEND));
     }
 
     return this._element;

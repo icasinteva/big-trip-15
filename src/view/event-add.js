@@ -1,159 +1,93 @@
-import { nanoid } from 'nanoid';
 import { BLANK_EVENT } from '../const';
-import AbstractView from './abstract';
-import { EventType, Destination } from '../enums';
-import { remove } from '../utils/render';
+import { RenderPosition } from '../enums';
+import { createElement, render } from '../utils/render';
+import { createFormTemplate } from '../utils/add-edit-form';
+import Smart from './smart';
+import EventDetailsView from './event-details-section';
 
-const createEventAddTemplate = (event) => {
-  const { eventType, destination, startDate, endDate, price } =
-    event;
-  const modeClass = destination ? 'event--edit' : 'event--add';
-  const resetBtnTitle = destination ? 'Delete' : 'Cancel';
-  const eventTypeItems = Object.values(EventType).map((eventTypeItem) => {
-    const checked = eventTypeItem === eventType ? 'checked' : '';
-
-    return `<div class="event__type-item">
-            <input id="event-type-${eventTypeItem}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeItem}" ${checked}>
-            <label class="event__type-label  event__type-label--${eventTypeItem}" for="event-type-${eventTypeItem}-1">${eventTypeItem}</label>
-          </div>`;
-  }).join('');
-
-  const destinations = Object.values(Destination).map(
-    (dest) => `<option value=${dest}></option>`,
-  );
-
-  return `<form class="event ${modeClass}" action="#" method="post">
-            <header class="event__header">
-              <div class="event__type-wrapper">
-                <label class="event__type  event__type-btn" for="event-type-toggle-1">
-                  <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" width="17" height="17" src="img/icons/${eventType}.png" alt="Event type icon">
-                </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-
-                <div class="event__type-list">
-                  <fieldset class="event__type-group">
-                    <legend class="visually-hidden">Event type</legend>
-                    ${eventTypeItems}
-                  </fieldset>
-                </div>
-              </div>
-
-              <div class="event__field-group  event__field-group--destination">
-                <label class="event__label  event__type-output" for="event-destination-1">
-                  ${eventType}
-                </label>
-                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
-                <datalist id="destination-list-1">
-                  ${destinations}
-                </datalist>
-              </div>
-
-              <div class="event__field-group  event__field-group--time">
-                <label class="visually-hidden" for="event-start-time-1">From</label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate.format('DD/MM/YY HH:MM')}">
-                —
-                <label class="visually-hidden" for="event-end-time-1">To</label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate.format('DD/MM/YY HH:MM')}">
-              </div>
-
-              <div class="event__field-group  event__field-group--price">
-                <label class="event__label" for="event-price-1">
-                  <span class="visually-hidden">Price</span>
-                  €
-                </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${price}>
-              </div>
-
-              <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-              <button class="event__reset-btn" type="reset">${resetBtnTitle}</button>
-              <button class="event__rollup-btn" type="button">
-                <span class="visually-hidden">Open event</span>
-              </button>
-            </header>
-          </form>`;
-};
-class EventAddView extends AbstractView {
+class AddEventFormView extends Smart {
   constructor(event = BLANK_EVENT) {
     super();
-    this._event = event;
-    this._changeEventTypeListener = this._changeEventTypeListener.bind(this);
-    this._changeDestinationListener = this._changeDestinationListener.bind(this);
+    this._data = AddEventFormView.parseEventToData(event);
+    this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
+    this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._offersChangeHandler = this._offersChangeHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._cancelClickHandler = this._cancelClickHandler.bind(this);
     this._saveClickHandler = this._saveClickHandler.bind(this);
+
+    this._setInnerHandlers();
+  }
+
+  static parseEventToData(event) {
+    return Object.assign(
+      {},
+      { isAddMode: true },
+      event,
+    );
+  }
+
+  static parseDataToEvent(data) {
+    delete data.isAddMode;
+
+    return data;
   }
 
   getTemplate() {
-    return createEventAddTemplate(this._event);
+    return createFormTemplate(this._data);
   }
 
-  get eventType() {
-    if (!this._evenType) {
-      this._eventType = this.queryChildElement('.event__type-input:checked').value || '';
+  getElement() {
+    if (!this._element) {
+      this._element  = createElement(this.getTemplate());
+
+      render(this._element, new EventDetailsView(this._data, this._offersChangeHandler).getElement(), RenderPosition.BEFOREEND);
     }
 
-    return this._eventType;
+    return this._element;
   }
 
-  get destination() {
-    if (!this._destination) {
-      this._destination = this.queryChildElement('.event__input--destination').value || '';
-    }
-
-    return this._destination;
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setCancelClickHandler(this._callback.cancelClick);
+    this.setSaveClickHandler(this._callback.saveClick);
   }
 
-  get price() {
-    if (!this._price) {
-      this._price = this.queryChildElement('.event__input--price').value || '';
-    }
-
-    return this._price;
+  _setInnerHandlers() {
+    this.queryChildElements('.event__type-input').forEach((eventTypeInput) => eventTypeInput.addEventListener('change', this._eventTypeChangeHandler));
+    this.queryChildElement('.event__input--destination').addEventListener('change', this._destinationChangeHandler);
+    this.queryChildElement('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }
 
-  get eventData() {
-    return {
-      price: +this.price,
-      startDate: this._event.startDate,
-      endDate: this._event.endDate,
-      destination: this.destination,
-      id: this._event.id || nanoid(),
-      isFavorite: this._event.isFavorite,
-      offers: this._event.offers || [],
-      eventType: this.eventType,
-    };
+  _eventTypeChangeHandler({target}) {
+    this.updateData({ eventType: target.value });
   }
 
-  _changeEventTypeListener(evt) {
-    this._callback.changeEventType(evt);
+  _destinationChangeHandler({target}) {
+    this.updateData({ destination: target.value });
   }
 
-  _changeDestinationListener(evt) {
-    this._callback.changeDestination(evt);
+  _offersChangeHandler({target}) {
+    const { price, title } = target.dataset;
+    this.updateData({ offers: [...this._data.offers, { id: target.name, price: +price, title }] });
+  }
+
+  _priceChangeHandler({target}) {
+    this.updateData({ price: +target.value });
   }
 
   _cancelClickHandler(evt) {
     evt.preventDefault();
-    this._callback.cancel();
+    this._callback.cancelClick();
   }
 
   _saveClickHandler(evt) {
     evt.preventDefault();
-    this._callback.saveClick(this.eventData);
-  }
-
-  setChangeEventTypeListener(callback) {
-    this._callback.changeEventType = callback;
-    this.queryChildElements('.event__type-input').forEach((eventTypeInput) => eventTypeInput.addEventListener('change', this._changeEventTypeListener));
-  }
-
-  setChangeDestinationListener(callback) {
-    this._callback.changeDestination = callback;
-    this.queryChildElement('.event__input--destination').addEventListener('change', this._changeDestinationListener);
+    this._callback.saveClick(AddEventFormView.parseDataToEvent(this._data));
   }
 
   setCancelClickHandler(callback) {
-    this._callback.cancel = callback;
+    this._callback.cancelClick = callback;
     this.queryChildElement('.event__reset-btn').addEventListener('click', this._cancelClickHandler);
   }
 
@@ -161,17 +95,5 @@ class EventAddView extends AbstractView {
     this._callback.saveClick = callback;
     this.getElement().addEventListener('submit', this._saveClickHandler);
   }
-
-  changeEventType(value) {
-    const eventTypeIconElement = this.queryChildElement('.event__type-icon');
-
-    eventTypeIconElement.src = eventTypeIconElement.getAttribute('src').replace(/(img\/icons\/)[a-z]+(-[a-z]+){0,}/, `$1${value}`);
-    this.queryChildElement('.event__type-output').textContent = value;
-    this.queryChildElement('.event__type-toggle').checked = false;
-  }
-
-  removeForm() {
-    remove(this);
-  }
 }
-export default EventAddView;
+export default AddEventFormView;

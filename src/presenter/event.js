@@ -24,6 +24,7 @@ class Event {
 
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
+
     this._handleExitEditModeClick = this._handleExitEditModeClick.bind(this);
     this._handleSaveClick = this._handleSaveClick.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
@@ -79,6 +80,7 @@ class Event {
   _handleFavoriteClick() {
     this._updateEvent({...this._event, isFavorite: !this._event.isFavorite});
   }
+
 
   _handleEditClick() {
     this._replaceEventToForm();
