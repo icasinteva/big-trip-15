@@ -1,23 +1,16 @@
-import EventAddView from './event-add';
-import { RenderPosition } from '../enums';
-import { createElement, render} from '../utils/render';
-import EventDetailsView from './event-details-section';
+import AddEventFormView from './event-add';
+import { createFormTemplate } from '../utils/add-edit-form';
 
-class EventEditView extends EventAddView {
+
+class EventEditView extends AddEventFormView {
   constructor(event) {
-    super(event);
+    super({isAddMode: false, ...event});
     this._exitEditModeListener = this._exitEditModeListener.bind(this);
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element  = createElement(super.getTemplate());
-
-      render(this._element, new EventDetailsView(this._event).getElement(), RenderPosition.BEFOREEND);
-    }
-
-    return this._element;
+  getTemplate() {
+    return createFormTemplate(this._data);
   }
 
   _exitEditModeListener(evt) {

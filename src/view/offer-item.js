@@ -11,7 +11,7 @@ const createOfferItemTemplate = ({
   const checked = selected ? 'checked' : '';
 
   return `<div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="${id}-1" type="checkbox" name=${id} ${checked}>
+  <input class="event__offer-checkbox  visually-hidden" id="${id}-1" type="checkbox" name=${id} ${checked} data-price=${price} data-title="${title}">
   <label class="event__offer-label" for="${id}-1">
     <span class="event__offer-title">${title}</span>
     +${createPriceTemplate('event__offer-price ', price)}
@@ -20,9 +20,10 @@ const createOfferItemTemplate = ({
 };
 
 class OfferItemView extends AbstractView {
-  constructor(offerData) {
+  constructor(offerData, offersChangeHandler) {
     super();
     this._offerData = offerData;
+    this.queryChildElement('.event__offer-checkbox').addEventListener('change', offersChangeHandler);
   }
 
   getTemplate() {

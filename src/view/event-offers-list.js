@@ -11,7 +11,7 @@ const createEventOfferTemplate = ({ title, price }) => `<li class="event__offer"
 const createEventOfferListTemplate = () => '<ul class="event__selected-offers"></ul>';
 
 class EventOffersListView extends AbstractView {
-  constructor(offers) {
+  constructor(offers = []) {
     super();
     this._offers = offers;
   }

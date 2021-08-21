@@ -1,4 +1,4 @@
-import { createElement, createPriceTemplate } from '../utils/render';
+import { createPriceTemplate } from '../utils/render';
 import { calculateTripCost, getTripRange, getDestinations } from '../utils/trip-info';
 import AbstractView from './abstract';
 
@@ -25,14 +25,6 @@ class TripInfoView extends AbstractView {
 
   getTemplate() {
     return createTripInfoTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element && this._events.length) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 }
 

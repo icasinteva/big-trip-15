@@ -7,9 +7,10 @@ import OffersSectionView from './offers-section';
 
 const createEventDetailsTemaplate = () => '<section class="event__details"></section>';
 class EventDetailsView extends AbstractView {
-  constructor(event) {
+  constructor(data, offersChangeHandler) {
     super();
-    this._event = event;
+    this._data = data;
+    this._offersChangeHandler = offersChangeHandler;
   }
 
   getTemplate() {
@@ -18,11 +19,11 @@ class EventDetailsView extends AbstractView {
 
   getElement() {
     if (!this._element) {
-      const { destination, eventType } = this._event;
+      const { destination, eventType } = this._data;
       if (destination) {
         const { description, photos = [] } = DestinationData[destination];
         const availableEventOffers = DestinationData[destination].offers[eventType];
-        const selectedEventTypeOffers = this._event.offers;
+        const selectedEventTypeOffers = this._data.offers;
 
         let eventOffersToshow = [];
 
@@ -44,7 +45,7 @@ class EventDetailsView extends AbstractView {
           eventOffersToshow = [...availableEventOffers];
         }
 
-        const offersSectionComponent = new OffersSectionView(eventOffersToshow);
+        const offersSectionComponent = new OffersSectionView(eventOffersToshow, this._offersChangeHandler);
         const destinationSectionComponent = new DestinationSectionView(description, photos);
 
 

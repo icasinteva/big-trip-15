@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Keydown } from '../enums';
+import { Filter, Sorting, Keydown } from '../enums';
 import AbstractView from '../view/abstract';
 
 const getRandomInteger = (a = 0, b = 1) => {
@@ -64,17 +64,26 @@ const addItem = (items, newItem) => [
 
 const updateItem = (items, updatedItem) => items.map((item) => item.id === updatedItem.id ? updatedItem : item);
 
-const deleteItem = (items, deletedItem) => items.filter(({id}) => id !== deletedItem.id);
+const deleteItem = (items, deletedItem) => items.filter(({ id }) => id !== deletedItem.id);
+
+const filterTypeToCallBack = {
+  [Filter.EVERYTHING]: filterEverything,
+  [Filter.FUTURE]: filterFutureEvents,
+  [Filter.PAST]: filterPastEvents,
+};
+
+const sortTypeToCallBack = {
+  [Sorting.DAY]: sortEventsByDateUp,
+  [Sorting.TIME]: sortEventsByTime,
+  [Sorting.PRICE]: sortEventsByPrice,
+};
 
 export {
   getRandomInteger,
   humanizeEventStartDate,
-  filterEverything,
-  filterFutureEvents,
-  filterPastEvents,
+  filterTypeToCallBack,
+  sortTypeToCallBack,
   sortEventsByDateUp,
-  sortEventsByTime,
-  sortEventsByPrice,
   onEscKeyDown,
   contains,
   updateItem,

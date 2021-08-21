@@ -1,5 +1,5 @@
 
-import { sortEventsByDateUp, humanizeEventStartDate } from '../utils/common';
+import { humanizeEventStartDate } from '../utils/common';
 
 const calculateTripCost = (arr) =>
   arr.reduce((acc, reducer) => {
@@ -15,7 +15,7 @@ const calculateTripCost = (arr) =>
 
 
 const getTripRange = (events) => {
-  const sortedEvents = sortEventsByDateUp(events);
+  const sortedEvents = events;
 
   return {
     startDate: humanizeEventStartDate(sortedEvents[0].startDate),
@@ -24,6 +24,7 @@ const getTripRange = (events) => {
 };
 
 const getDestinations = (events) => {
+
   const start = events[0].destination;
   const end = events[events.length - 1].destination;
 
