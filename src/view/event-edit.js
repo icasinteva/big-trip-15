@@ -20,7 +20,7 @@ class EventEditView extends AddEventFormView {
 
   _deleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick(this._event);
+    this._callback.deleteClick(EventEditView.parseDataToEvent(this._data));
   }
 
   setExitEditModeListener(callback) {

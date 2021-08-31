@@ -1,7 +1,7 @@
 import EventsListItemView from '../view/events-list-item';
 import EventView from '../view/event';
 import EventEditView from '../view/event-edit';
-import { RenderPosition } from '../enums';
+import { RenderPosition, UserAction, UpdateType } from '../enums';
 import { render, replace, remove } from '../utils/render.js';
 import { onEscKeyDown } from '../utils/common';
 
@@ -11,10 +11,9 @@ const Mode = {
 };
 
 class Event {
-  constructor(eventsListContainer, {updateEvent, deleteEvent, changeMode}) {
+  constructor(eventsListContainer, {updateEvent, changeMode}) {
     this._eventsListContainer = eventsListContainer;
     this._updateEvent = updateEvent;
-    this._deleteEvent = deleteEvent;
     this._changeMode = changeMode;
 
     this._eventListItemComponent = null;
@@ -78,7 +77,10 @@ class Event {
   }
 
   _handleFavoriteClick() {
-    this._updateEvent({...this._event, isFavorite: !this._event.isFavorite});
+    this._updateEvent(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      { ...this._event, isFavorite: !this._event.isFavorite });
   }
 
 
@@ -93,13 +95,20 @@ class Event {
   }
 
   _handleSaveClick(event) {
-    this._updateEvent(event);
+    this._updateEvent(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
     this._handleExitEditModeClick();
   }
 
   _handleDeleteClick(event) {
-    this._deleteEvent(event);
-    this._handleExitEditModeClick();
+    this._updateEvent(
+      UserAction.DELETE_EVENT,
+      UpdateType.MAJOR,
+      event,
+    );
   }
 
   _escKeyDownHandler(ev) {
