@@ -1,4 +1,4 @@
-export default class AbstractObserver {
+class AbstractObserver {
   constructor() {
     this._observers = new Set();
   }
@@ -16,3 +16,4 @@ export default class AbstractObserver {
   }
 }
 
+export default  AbstractObserver;

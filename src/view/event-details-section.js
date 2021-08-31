@@ -29,17 +29,17 @@ class EventDetailsView extends AbstractView {
 
         if (availableEventOffers && selectedEventTypeOffers) {
           for (let i = 0; i < availableEventOffers.length; i++) {
-            const eventOfferToShow = { ...availableEventOffers[i] };
+            const eventOfferToShow = Object.assign({}, availableEventOffers[i]);
 
             for (let j = 0; j < selectedEventTypeOffers.length; j++) {
-              const selectedOffer = { ...selectedEventTypeOffers[j] };
+              const selectedOffer = Object.assign({}, selectedEventTypeOffers[j]);
 
               if (eventOfferToShow.title === selectedOffer.title) {
                 eventOfferToShow.selected = true;
                 continue;
               }
             }
-            eventOffersToshow.push({ ...eventOfferToShow });
+            eventOffersToshow.push(Object.assign({}, eventOfferToShow));
           }
         } else if (availableEventOffers) {
           eventOffersToshow = [...availableEventOffers];

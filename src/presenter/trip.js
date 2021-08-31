@@ -71,31 +71,38 @@ class Trip {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
-      case UserAction.UPDATE_EVENT:
+      case UserAction.UPDATE_EVENT: {
         this._eventsModel.updateEvent(updateType, update);
         break;
-      case UserAction.ADD_EVENT:
+      }
+      case UserAction.ADD_EVENT: {
         this._eventsModel.addEvent(updateType, update);
         break;
-      case UserAction.DELETE_EVENT:
+      }
+      case UserAction.DELETE_EVENT: {
         this._eventsModel.deleteEvent(updateType, update);
         break;
+      }
     }
   }
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
-      case UpdateType.PATCH:
+      case UpdateType.PATCH: {
         this._eventPresenter.get(data.id).init(data);
         break;
-      case UpdateType.MINOR:
+      }
+
+      case UpdateType.MINOR: {
         this._clearTrip();
         this._renderTrip();
         break;
-      case UpdateType.MAJOR:
+      }
+      case UpdateType.MAJOR: {
         this._clearTrip({resetSortType: true, resetTripInfo: true});
         this._renderTrip();
         break;
+      }
     }
   }
 

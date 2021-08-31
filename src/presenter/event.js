@@ -80,7 +80,7 @@ class Event {
     this._updateEvent(
       UserAction.UPDATE_EVENT,
       UpdateType.MINOR,
-      { ...this._event, isFavorite: !this._event.isFavorite });
+      Object.assign({}, this._event, { isFavorite: !this._event.isFavorite }));
   }
 
 
