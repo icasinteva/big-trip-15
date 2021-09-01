@@ -27,7 +27,13 @@ const convertMS = (diffMinutes) => {
 };
 
 const getDuration = (startDate, endDate) => {
-  const diff = endDate.diff(startDate, 'minute');
+  let diff;
+
+  if (!endDate) {
+    diff = startDate;
+  } else {
+    diff = endDate.diff(startDate, 'minute');
+  }
   const duration = convertMS(diff);
   const res = [];
 

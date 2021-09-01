@@ -164,4 +164,9 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown, UserAction, UpdateType };
+const MenuItem = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
+
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown, UserAction, UpdateType, MenuItem };
