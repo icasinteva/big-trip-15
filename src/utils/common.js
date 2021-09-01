@@ -9,7 +9,25 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const humanizeEventStartDate = (dateStr) => dayjs(dateStr).format('MMM DD');
+const transformDateToUsFormat = (dateStr) => {
+  const [day, month, year] = dateStr.split('/');
+
+  return dayjs(`${month}/${day}/${year}`);
+};
+
+const humanizeEventDate = (dateStr, format = 'DD/MM/YY HH:mm') => {
+  if (typeof dateStr === 'string') {
+    dateStr = transformDateToUsFormat(dateStr);
+  }
+
+  if (!dateStr.format) {
+    dateStr = dayjs(dateStr);
+  }
+
+  return dateStr.format(format);
+};
+
+const humanizeEventStartDate = (startDate) => humanizeEventDate(startDate, 'MMM DD');
 
 const sortDateUp = (a, b) => a.isAfter(b) ? 1 : -1;
 
@@ -66,7 +84,9 @@ const sortTypeToCallBack = {
 
 export {
   getRandomInteger,
+  humanizeEventDate,
   humanizeEventStartDate,
+  transformDateToUsFormat,
   sortTypeToCallBack,
   sortEventsByDateUp,
   onEscKeyDown,
