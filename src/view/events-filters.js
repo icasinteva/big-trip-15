@@ -1,38 +1,26 @@
 import AbstractView from './abstract';
 import { Filter } from '../enums';
 
-const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
-  const filters = {
-    [Filter.EVERYTHING]: {
-      checked: true,
-    },
-    [Filter.FUTURE]: {
-      checked: false,
-    },
-    [Filter.PAST]: {
-      checked: false,
-    },
-  };
+const createFiltersItemTemplate = (filter, selectedFilter) => {
+  const checked = filter === selectedFilter ? 'checked' : '';
 
-  filters[selectedFilter].checked = true;
-
-  const filterItems = Object.entries(filters)
-    .map(
-      ([key, value]) => {
-        const checked = value.checked ? 'checked' : '';
-
-        return `<div class="trip-filters__filter">
-                  <input id="filter-${key}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" data-filter-type=${key} value=${key} ${checked}>
-                  <label class="trip-filters__filter-label" for="filter-${key}">${key}</label>
+  return `<div class="trip-filters__filter">
+                  <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" data-filter-type=${filter} value=${filter} ${checked}>
+                  <label class="trip-filters__filter-label" for="filter-${filter}">${filter}</label>
                 </div>`;
-      },
-    )
+};
+
+const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
+  const filters = [Filter.EVERYTHING, Filter.FUTURE, Filter.PAST];
+
+  const filterItemsTemplate = filters
+    .map((filter) => createFiltersItemTemplate(filter, selectedFilter))
     .join('');
 
   return `<div class="trip-controls__filters">
             <h2 class="visually-hidden">Filter events</h2>
             <form class="trip-filters" action="#" method="get">
-              ${filterItems}
+              ${filterItemsTemplate}
               <button class="visually-hidden" type="submit">Accept filter</button>
             </form>
           </div>`;

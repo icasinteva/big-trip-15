@@ -8,7 +8,7 @@ const generateOffers = (destination, eventType) => {
 
   if (eventTypeOffers && eventTypeOffers.length) {
     const cloneEventTypeOffers = eventTypeOffers.map((offer) => {
-      const clone = { ...offer };
+      const clone = Object.assign({}, offer);
 
       clone.selected = Boolean(getRandomInteger(0, 1));
 

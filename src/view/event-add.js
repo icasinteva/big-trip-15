@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { BLANK_EVENT } from '../const';
 import { RenderPosition } from '../enums';
 import { createElement, render } from '../utils/render';
@@ -22,15 +23,16 @@ class AddEventFormView extends Smart {
   static parseEventToData(event) {
     return Object.assign(
       {},
-      { isAddMode: true },
       event,
     );
   }
 
   static parseDataToEvent(data) {
-    delete data.isAddMode;
-
-    return data;
+    return Object.assign(
+      {},
+      { id: nanoid()},
+      data,
+    );
   }
 
   getTemplate() {

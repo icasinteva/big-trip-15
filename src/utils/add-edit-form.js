@@ -1,11 +1,11 @@
 import { EventType, Destination } from '../enums';
 
 const createFormTemplate = (data) => {
-  const { eventType, destination, startDate, endDate, price, isAddMode } =
+  const { eventType, destination, startDate, endDate, price, id } =
     data;
 
-  const modeClassName = isAddMode ? 'event--add' : 'event--edit';
-  const resetButtonTitle = isAddMode ? 'Cancel' : 'Delete';
+  const modeClassName = !id ? 'event--add' : 'event--edit';
+  const resetButtonTitle = !id ? 'Cancel' : 'Delete';
   const eventTypeItems = Object.values(EventType).map((eventTypeItem) => {
     const checked = eventTypeItem === eventType ? 'checked' : '';
 
@@ -59,7 +59,7 @@ const createFormTemplate = (data) => {
                     <span class="visually-hidden">Price</span>
                     €
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${price}>
+                  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price}>
                 </div>
   
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

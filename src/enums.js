@@ -152,4 +152,16 @@ const Keydown = {
   ESCAPE: 'Escape',
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown };
+const UserAction = {
+  UPDATE_EVENT: 'UPDATE_EVENT',
+  ADD_EVENT: 'ADD_EVENT',
+  DELETE_EVENT: 'DELETE_EVENT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown, UserAction, UpdateType };
