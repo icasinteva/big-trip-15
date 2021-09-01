@@ -1,15 +1,15 @@
 import AbstractView from './abstract';
 import EventOffersListView from './event-offers-list';
 import { render, createElement, createPriceTemplate } from '../utils/render';
-import { humanizeEventStartDate } from '../utils/common';
+import { humanizeEventDate, humanizeEventStartDate } from '../utils/common';
 import { getDuration } from '../utils/event';
 import { RenderPosition } from '../enums';
 
 const createEventTemplate = (event) => {
   const { eventType, destination, startDate, endDate, price, isFavorite } =
-  event;
-  const startTime = startDate.format('HH:MM');
-  const endTime = endDate.format('HH:MM');
+    event;
+  const startTime = humanizeEventDate(startDate, 'HH:MM');
+  const endTime = humanizeEventDate(endDate, 'HH:MM');
   const duration = getDuration(startDate, endDate);
   const favoriteClassName = isFavorite
     ? 'event__favorite-btn event__favorite-btn--active'

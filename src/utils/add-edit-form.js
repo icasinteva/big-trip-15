@@ -1,8 +1,13 @@
 import { EventType, Destination } from '../enums';
+import { humanizeEventDate } from './common';
 
 const createFormTemplate = (data) => {
-  const { eventType, destination, startDate, endDate, price, id } =
+  const { eventType, destination, price, id } =
     data;
+  const startDate = humanizeEventDate(data.startDate);
+  const endDate = humanizeEventDate(data.endDate);
+  const isSaveDisabled = !price || !destination;
+  const disabled = isSaveDisabled ? 'disabled' : '';
 
   const modeClassName = !id ? 'event--add' : 'event--edit';
   const resetButtonTitle = !id ? 'Cancel' : 'Delete';
@@ -48,10 +53,10 @@ const createFormTemplate = (data) => {
   
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-1">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate.format('DD/MM/YY HH:MM')}">
+                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate}">
                   —
                   <label class="visually-hidden" for="event-end-time-1">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate.format('DD/MM/YY HH:MM')}">
+                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate}">
                 </div>
   
                 <div class="event__field-group  event__field-group--price">
@@ -62,7 +67,7 @@ const createFormTemplate = (data) => {
                   <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price}>
                 </div>
   
-                <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                <button class="event__save-btn  btn  btn--blue" type="submit" ${disabled}>Save</button>
                 <button class="event__reset-btn" type="reset">${resetButtonTitle}</button>
                 <button class="event__rollup-btn" type="button">
                   <span class="visually-hidden">Open event</span>

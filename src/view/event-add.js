@@ -5,19 +5,28 @@ import { createElement, render } from '../utils/render';
 import { createFormTemplate } from '../utils/add-edit-form';
 import Smart from './smart';
 import EventDetailsView from './event-details-section';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import { humanizeEventDate, transformDateToUsFormat } from '../utils/common';
 
 class AddEventFormView extends Smart {
   constructor(event = BLANK_EVENT) {
     super();
     this._data = AddEventFormView.parseEventToData(event);
+    this._startDatePicker = null;
+    this._endDatePicker = null;
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._cancelClickHandler = this._cancelClickHandler.bind(this);
     this._saveClickHandler = this._saveClickHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setDatepickers();
   }
 
   static parseEventToData(event) {
@@ -28,10 +37,20 @@ class AddEventFormView extends Smart {
   }
 
   static parseDataToEvent(data) {
+    let { startDate, endDate } = data;
+
+    if (typeof startDate === 'string') {
+      startDate = transformDateToUsFormat(startDate);
+    }
+    if (typeof endDate === 'string') {
+      endDate = transformDateToUsFormat(endDate);
+    }
+
     return Object.assign(
       {},
-      { id: nanoid()},
+      { id: nanoid() },
       data,
+      { startDate, endDate },
     );
   }
 
@@ -51,8 +70,47 @@ class AddEventFormView extends Smart {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepickers();
     this.setCancelClickHandler(this._callback.cancelClick);
     this.setSaveClickHandler(this._callback.saveClick);
+  }
+
+  _setDatepickers() {
+    if (this._startDatePicker) {
+      this._startDatePicker.destroy();
+      this._startDatePicker = null;
+    }
+
+    if (this._endDatePicker) {
+      this._endDatePicker.destroy();
+      this._endDatePicker = null;
+    }
+
+    this._startDatePicker = flatpickr(
+      this.queryChildElement('[name="event-start-time"]'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.startDate,
+        minDate: 'today',
+        enableTime:true,
+        allowInput: true,
+        'time_24hr': true,
+        onChange: this._startDateChangeHandler,
+      },
+    );
+
+    this._endDatePicker = flatpickr(
+      this.queryChildElement('[name="event-end-time"]'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.endDate,
+        minDate: this._data.startDate,
+        enableTime:true,
+        allowInput: true,
+        'time_24hr': true,
+        onChange: this._endDateChangeHandler,
+      },
+    );
   }
 
   _setInnerHandlers() {
@@ -67,6 +125,14 @@ class AddEventFormView extends Smart {
 
   _destinationChangeHandler({target}) {
     this.updateData({ destination: target.value });
+  }
+
+  _startDateChangeHandler([startDate]) {
+    this.updateData({startDate: humanizeEventDate(startDate)});
+  }
+
+  _endDateChangeHandler([endDate]) {
+    this.updateData({endDate: humanizeEventDate(endDate)});
   }
 
   _offersChangeHandler({target}) {
