@@ -4,8 +4,12 @@ import AbstractView from './abstract';
 
 const createTripInfoTemplate = (events) => {
   const { startDate, endDate } = getTripRange(events);
-  const destinations = getDestinations(events);
+  let destinations = getDestinations(events);
   const price = calculateTripCost(events);
+
+  if (destinations.length > 3) {
+    destinations = [destinations[0], '...', destinations[destinations.length - 1]];
+  }
 
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">

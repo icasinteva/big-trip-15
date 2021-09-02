@@ -1,6 +1,7 @@
 import AbstractView from './abstract';
 import { createElement, render } from '../utils/render';
-import { RenderPosition, DestinationData } from '../enums';
+import { RenderPosition } from '../enums';
+import { availableOffers } from '../mock/offers';
 import DestinationSectionView from './destination-section';
 import OffersSectionView from './offers-section';
 
@@ -19,35 +20,27 @@ class EventDetailsView extends AbstractView {
 
   getElement() {
     if (!this._element) {
-      const { destination, eventType } = this._data;
+      const { destination, eventType, offers } = this._data;
       if (destination) {
-        const { description, photos = [] } = DestinationData[destination];
-        const availableEventOffers = DestinationData[destination].offers[eventType];
-        const selectedEventTypeOffers = this._data.offers;
+        const { description, pictures = [] } = destination;
+        const availableEventOffers = (availableOffers || []).find((item) => item.type === eventType).offers;
+        const selectedEventTypeOffers = offers;
+
 
         let eventOffersToshow = [];
 
         if (availableEventOffers && selectedEventTypeOffers) {
-          for (let i = 0; i < availableEventOffers.length; i++) {
-            const eventOfferToShow = Object.assign({}, availableEventOffers[i]);
-
-            for (let j = 0; j < selectedEventTypeOffers.length; j++) {
-              const selectedOffer = Object.assign({}, selectedEventTypeOffers[j]);
-
-              if (eventOfferToShow.title === selectedOffer.title) {
-                eventOfferToShow.selected = true;
-                continue;
-              }
+          eventOffersToshow = availableEventOffers.map((obj) => Object.assign({}, obj));
+          selectedEventTypeOffers.forEach((selected) => {
+            const index = eventOffersToshow.findIndex((s) => s.title === selected.title);
+            if (index !== -1) {
+              eventOffersToshow[index].selected = true;
             }
-            eventOffersToshow.push(Object.assign({}, eventOfferToShow));
-          }
-        } else if (availableEventOffers) {
-          eventOffersToshow = [...availableEventOffers];
+          });
         }
 
         const offersSectionComponent = new OffersSectionView(eventOffersToshow, this._offersChangeHandler);
-        const destinationSectionComponent = new DestinationSectionView(description, photos);
-
+        const destinationSectionComponent = new DestinationSectionView(description, pictures);
 
         if (offersSectionComponent.getElement() || destinationSectionComponent.getElement()) {
           this._element = createElement(this.getTemplate());

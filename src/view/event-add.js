@@ -6,6 +6,7 @@ import { createFormTemplate } from '../utils/add-edit-form';
 import Smart from './smart';
 import EventDetailsView from './event-details-section';
 import flatpickr from 'flatpickr';
+import { destinations } from '../mock/destinations';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { humanizeEventDate, transformDateToUsFormat } from '../utils/common';
@@ -71,6 +72,9 @@ class AddEventFormView extends Smart {
   restoreHandlers() {
     this._setInnerHandlers();
     this._setDatepickers();
+    if (this.setExitEditModeListener) {
+      this.setExitEditModeListener(this._callback.exitEditMode);
+    }
     this.setCancelClickHandler(this._callback.cancelClick);
     this.setSaveClickHandler(this._callback.saveClick);
   }
@@ -123,8 +127,9 @@ class AddEventFormView extends Smart {
     this.updateData({ eventType: target.value });
   }
 
-  _destinationChangeHandler({target}) {
-    this.updateData({ destination: target.value });
+  _destinationChangeHandler({ target }) {
+    const destination = destinations.find(({ name }) => name === target.value) || { name: '' };
+    this.updateData({ destination });
   }
 
   _startDateChangeHandler([startDate]) {
@@ -135,9 +140,14 @@ class AddEventFormView extends Smart {
     this.updateData({endDate: humanizeEventDate(endDate)});
   }
 
-  _offersChangeHandler({target}) {
+  _offersChangeHandler({ target }) {
     const { price, title } = target.dataset;
-    this.updateData({ offers: [...this._data.offers, { id: target.name, price: +price, title }] });
+    if (target.checked) {
+      this.updateData({ offers: [...this._data.offers, { id: target.name, price: +price, title }] });
+    } else {
+      this.updateData({ offers: [...this._data.offers.filter((offer) => offer.title !== title)] });
+    }
+
   }
 
   _priceChangeHandler({target}) {

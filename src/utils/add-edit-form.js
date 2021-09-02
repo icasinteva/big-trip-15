@@ -1,12 +1,13 @@
-import { EventType, Destination } from '../enums';
+import { EventType } from '../enums';
+import { destinations } from '../mock/destinations';
 import { humanizeEventDate } from './common';
 
 const createFormTemplate = (data) => {
-  const { eventType, destination, price, id } =
+  const { eventType, destination = {name: ''}, price, id } =
     data;
   const startDate = humanizeEventDate(data.startDate);
   const endDate = humanizeEventDate(data.endDate);
-  const isSaveDisabled = !price || !destination;
+  const isSaveDisabled = !price || !destination.name;
   const disabled = isSaveDisabled ? 'disabled' : '';
 
   const modeClassName = !id ? 'event--add' : 'event--edit';
@@ -20,8 +21,8 @@ const createFormTemplate = (data) => {
             </div>`;
   }).join('');
 
-  const destinations = Object.values(Destination).map(
-    (dest) => `<option value=${dest}></option>`,
+  const availableDestinations = (Object.values(destinations || [])).map(
+    ({ name }) => `<option value=${name}></option>`,
   );
 
   return `<form class="event ${modeClassName}" action="#" method="post">
@@ -45,9 +46,9 @@ const createFormTemplate = (data) => {
                   <label class="event__label  event__type-output" for="event-destination-1">
                     ${eventType}
                   </label>
-                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
                   <datalist id="destination-list-1">
-                    ${destinations}
+                    ${availableDestinations}
                   </datalist>
                 </div>
   

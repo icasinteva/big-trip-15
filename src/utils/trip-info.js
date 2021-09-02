@@ -25,8 +25,8 @@ const getTripRange = (events) => {
 
 const getDestinations = (events) => {
 
-  const start = events[0].destination;
-  const end = events[events.length - 1].destination;
+  const start = events[0].destination.name;
+  const end = events[events.length - 1].destination.name;
 
   return [ start, ...Array.from(new Set(events.slice(1, events.length - 1).map(({ destination }) => destination))), end];
 };

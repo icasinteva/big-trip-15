@@ -13,10 +13,10 @@ const createDestinationSectionTemplate = () => `<section class="event__section  
           </section>`;
 
 class DestinationSectionView extends AbstractView {
-  constructor(description, photos) {
+  constructor(description, pictures) {
     super();
     this._description = description;
-    this._photos = photos;
+    this._pictures = pictures;
   }
 
   getTemplate() {
@@ -25,10 +25,10 @@ class DestinationSectionView extends AbstractView {
 
   getElement() {
     if (!this._element) {
-      const arePhotosPresent = this._photos.length;
+      const arePicturesPresent = this._pictures.length;
       const descriptionElement = createElement(createDescriptionSectionTemplate(this._description));
 
-      if (descriptionElement || arePhotosPresent) {
+      if (descriptionElement || arePicturesPresent) {
         this._element = createElement(this.getTemplate());
       }
 
@@ -36,8 +36,8 @@ class DestinationSectionView extends AbstractView {
         render(this._element, descriptionElement, RenderPosition.BEFOREEND);
       }
 
-      if (arePhotosPresent) {
-        render(this._element, new GallerySectionView(this._photos).getElement(), RenderPosition.BEFOREEND);
+      if (arePicturesPresent) {
+        render(this._element, new GallerySectionView(this._pictures).getElement(), RenderPosition.BEFOREEND);
       }
     }
 

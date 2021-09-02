@@ -1,5 +1,3 @@
-import { generatePhotos } from './mock/photos';
-
 const RenderPosition = {
   AFTERBEGIN: 'afterBegin',
   AFTEREND: 'afterEnd',
@@ -54,100 +52,6 @@ const Filter = {
   PAST: 'past',
 };
 
-const DestinationData = {
-  [Destination.AMSTERDAM]: {
-    description: '',
-    photos: generatePhotos(),
-    offers: {
-      [EventType.TAXI]: [
-        {
-          title: OfferName.UBER,
-          id: OfferId.UBER,
-          price: 20,
-        },
-      ],
-      [EventType.FLIGHT]: [
-        {
-          title: OfferName.LUGGAGE,
-          id: OfferId.LUGGAGE,
-          price: 300,
-        },
-        {
-          title: OfferName.COMFORT,
-          id: OfferId.COMFORT,
-          price: 100,
-        },
-        {
-          title: OfferName.MEAL,
-          id: OfferId.MEAL,
-          price: 15,
-        },
-        {
-          title: OfferName.SEATS,
-          id: OfferId.SEATS,
-          price: 5,
-        },
-        {
-          title: OfferName.TRAIN,
-          id: OfferId.TRAIN,
-          price: 40,
-        },
-      ],
-    },
-  },
-  [Destination.GENEVA]: {
-    offers: {
-      [EventType.TAXI]: [
-        {
-          title: OfferName.UBER,
-          id: OfferId.UBER,
-          price: 20,
-        },
-      ],
-      [EventType.FLIGHT]: [
-        {
-          title: OfferName.LUGGAGE,
-          id: OfferId.LUGGAGE,
-          price: 300,
-        },
-        {
-          title: OfferName.COMFORT,
-          id: OfferId.COMFORT,
-          price: 100,
-        },
-        {
-          title: OfferName.MEAL,
-          id: OfferId.MEAL,
-          price: 15,
-        },
-        {
-          title: OfferName.SEATS,
-          id: OfferId.SEATS,
-          price: 5,
-        },
-        {
-          title: OfferName.TRAIN,
-          id: OfferId.TRAIN,
-          price: 40,
-        },
-      ],
-    },
-    description:
-      'Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.',
-    photos: generatePhotos(),
-  },
-  [Destination.CHAMONIX]: {
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus',
-    photos: generatePhotos(),
-    offers: {},
-  },
-  [Destination.WARSAW]: {
-    description: '',
-    offers: {},
-  },
-};
-
 const Keydown = {
   ESCAPE: 'Escape',
 };
@@ -162,6 +66,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown, UserAction, UpdateType };
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, Keydown, UserAction, UpdateType };
