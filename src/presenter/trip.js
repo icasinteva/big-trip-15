@@ -1,8 +1,6 @@
 import LoadingView from '../view/loading';
 import Event from './event';
 import Filters from '../presenter/filters';
-import SiteNavigationView from '../view/site-navigation';
-import EventsFiltersView from '../view/events-filters';
 import EventsSortView from '../view/events-sort';
 import EventsListView from '../view/events-list-section';
 import EventsListItemView from '../view/events-list-item';
@@ -44,17 +42,22 @@ class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleEnterAddMode = this._handleEnterAddMode.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._filtersPresenter = null;
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filtersModel.addObserver(this._handleModelEvent);
   }
 
   init() {
-    const filtersPresenter = new Filters(this._controlsElement, this._filtersModel, this._eventsModel);
-
-    this._renderSiteNav();
-    filtersPresenter.init();
+    if (!this._filtersPresenter) {
+      this._filtersPresenter = new Filters(this._controlsElement, this._filtersModel, this._eventsModel);
+      this._filtersPresenter.init();
+    }
     this._renderAddEventButton();
     this._renderTrip();
+  }
+
+  destroy() {
+    this._clearTrip({ resetSortType: true, disableFilters: true, disableAddBtn: true });
   }
 
   _getEvents() {
@@ -104,7 +107,7 @@ class Trip {
         break;
       }
       case UpdateType.MAJOR: {
-        this._clearTrip({resetSortType: true, resetTripInfo: true});
+        this._clearTrip({resetSortType: true, removeTripInfo: true});
         this._renderTrip();
         break;
       }
@@ -180,17 +183,6 @@ class Trip {
     render(this._headerElement, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderSiteNav() {
-    render(this._controlsElement, new SiteNavigationView(), RenderPosition.BEFOREEND);
-  }
-
-  _renderFilters() {
-    this._eventsFiltersComponent = new EventsFiltersView(this._filterType);
-    render(this._controlsElement, this._eventsFiltersComponent, RenderPosition.BEFOREEND);
-
-    this._eventsFiltersComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-  }
-
   _renderSort() {
     this._eventsSortComponent = new EventsSortView(this._sortType);
 
@@ -223,7 +215,7 @@ class Trip {
     render(this._tripContainer , this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
-  _clearTrip({ resetSortType = false, resetTripInfo = false } = {}) {
+  _clearTrip({ removeTripInfo = false, disableFilters = false, resetSortType = false, disableAddBtn = false } = {}) {
     const eventsCount = this._getEvents().length;
     this._eventPresenter.forEach((presenter) => presenter.destroy());
     this._eventPresenter.clear();
@@ -234,8 +226,16 @@ class Trip {
     remove(this._loadingComponent);
     this._addEventButtonComponent.setDisabled(false);
 
-    if (!eventsCount || resetTripInfo) {
+    if (disableAddBtn) {
+      this._addEventButtonComponent.setDisabled(true);
+    }
+
+    if (!eventsCount || removeTripInfo) {
       remove(this._tripInfoComponent);
+    }
+
+    if (disableFilters) {
+      this._filtersPresenter.disabled = true;
     }
 
     if (resetSortType) {
@@ -253,6 +253,16 @@ class Trip {
     const events = this._getEvents();
     const eventsCount = events.length;
     const filter = this._filtersModel.getFilter();
+    const isAddBtnDisbaled = this._addEventButtonComponent.getElement().disabled;
+    const isFiltersDisabled = this._filtersPresenter.disabled;
+
+    if (isAddBtnDisbaled) {
+      this._addEventButtonComponent.setDisabled(false);
+    }
+
+    if (isFiltersDisabled) {
+      this._filtersPresenter.disabled = false;
+    }
 
     if (!eventsCount) {
       this._renderNoEvents(filter);

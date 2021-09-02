@@ -10,14 +10,17 @@ const createFiltersItemTemplate = (filter, selectedFilter) => {
                 </div>`;
 };
 
-const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
+const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING, disabled = false) => {
   const filters = [Filter.EVERYTHING, Filter.FUTURE, Filter.PAST];
+  const disabledClass = disabled ? 'trip-controls__filters--disabled' : '';
+
+  selectedFilter = !disabled ? selectedFilter : '';
 
   const filterItemsTemplate = filters
     .map((filter) => createFiltersItemTemplate(filter, selectedFilter))
     .join('');
 
-  return `<div class="trip-controls__filters">
+  return `<div class="trip-controls__filters ${disabledClass}">
             <h2 class="visually-hidden">Filter events</h2>
             <form class="trip-filters" action="#" method="get">
               ${filterItemsTemplate}
@@ -26,8 +29,9 @@ const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING) => {
           </div>`;
 };
 class EventsFiltersView extends AbstractView {
-  constructor(selectedFilter = Filter.EVERYTHING) {
+  constructor(selectedFilter, disabled) {
     super();
+    this._disabled = disabled;
     this._selectedFilter = selectedFilter;
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
@@ -41,7 +45,7 @@ class EventsFiltersView extends AbstractView {
   }
 
   getTemplate() {
-    return createFiltersTemplate(this._selectedFilter);
+    return createFiltersTemplate(this._selectedFilter, this._disabled);
   }
 
   _filterTypeChangeHandler(evt) {

@@ -1,9 +1,10 @@
 import EventsFiltersView from '../view/events-filters';
-import { remove, render, replace } from '../utils/render';
+import { remove, render } from '../utils/render';
 import { RenderPosition, UpdateType } from '../enums';
 
 class Filters {
   constructor(filtersContainer, filtersModel) {
+    this._disabled = false;
     this._filtersContainer = filtersContainer;
     this._filtersModel = filtersModel;
 
@@ -12,18 +13,24 @@ class Filters {
   }
 
   init() {
-    const prevFiltersComponent = this._filtersComponent;
+    this._filtersComponent = new EventsFiltersView(this._filtersModel.getFilter(), this._disabled);
+    render(this._filtersContainer, this._filtersComponent, RenderPosition.BEFOREEND);
 
-    if (!prevFiltersComponent) {
-      this._eventsFiltersComponent = new EventsFiltersView(this._filterType);
-      render(this._filtersContainer, this._eventsFiltersComponent, RenderPosition.BEFOREEND);
+    this._filtersComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+  }
 
-      this._eventsFiltersComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-      return;
-    }
+  destroy() {
+    remove(this._filtersComponent);
+  }
 
-    replace(this._filtersComponent, prevFiltersComponent);
-    remove(prevFiltersComponent);
+  get disabled() {
+    return this._disabled;
+  }
+
+  set disabled(value) {
+    this._disabled = value;
+    this.destroy();
+    this.init();
   }
 
   _handleFilterTypeChange(filterType) {
