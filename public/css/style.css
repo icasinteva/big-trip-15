@@ -191,6 +191,10 @@ main {
 .trip-main__trip-controls {
   width: 600px; }
 
+.trip-controls__filters--disabled {
+  pointer-events: none;
+}
+
 .trip-main__event-add-btn {
   min-width: 170px; }
   .trip-main__event-add-btn::before {
