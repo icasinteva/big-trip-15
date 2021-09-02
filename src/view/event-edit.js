@@ -1,16 +1,10 @@
 import AddEventFormView from './event-add';
-import { createFormTemplate } from '../utils/add-edit-form';
-
 
 class EventEditView extends AddEventFormView {
-  constructor(event) {
-    super(event);
+  constructor(eventsModel, event) {
+    super(eventsModel, event);
     this._exitEditModeListener = this._exitEditModeListener.bind(this);
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
-  }
-
-  getTemplate() {
-    return createFormTemplate(this._data);
   }
 
   _exitEditModeListener(evt) {

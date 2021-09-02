@@ -6,14 +6,16 @@ import { createFormTemplate } from '../utils/add-edit-form';
 import Smart from './smart';
 import EventDetailsView from './event-details-section';
 import flatpickr from 'flatpickr';
-import { destinations } from '../mock/destinations';
+import Api from '../api';
+import { END_POINT, AUTHORIZATION } from '../const';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { humanizeEventDate, transformDateToUsFormat } from '../utils/common';
 
 class AddEventFormView extends Smart {
-  constructor(event = BLANK_EVENT) {
+  constructor(eventsModel, event = BLANK_EVENT) {
     super();
+    this._eventsModel = eventsModel;
     this._data = AddEventFormView.parseEventToData(event);
     this._startDatePicker = null;
     this._endDatePicker = null;
@@ -25,6 +27,7 @@ class AddEventFormView extends Smart {
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._cancelClickHandler = this._cancelClickHandler.bind(this);
     this._saveClickHandler = this._saveClickHandler.bind(this);
+    this._api = new Api(END_POINT, AUTHORIZATION);
 
     this._setInnerHandlers();
     this._setDatepickers();
@@ -56,14 +59,14 @@ class AddEventFormView extends Smart {
   }
 
   getTemplate() {
-    return createFormTemplate(this._data);
+    return createFormTemplate(this._eventsModel.destinations, this._data);
   }
 
   getElement() {
     if (!this._element) {
       this._element  = createElement(this.getTemplate());
 
-      render(this._element, new EventDetailsView(this._data, this._offersChangeHandler).getElement(), RenderPosition.BEFOREEND);
+      render(this._element, new EventDetailsView(this._data, this._eventsModel.offers, this._offersChangeHandler).getElement(), RenderPosition.BEFOREEND);
     }
 
     return this._element;
@@ -128,7 +131,7 @@ class AddEventFormView extends Smart {
   }
 
   _destinationChangeHandler({ target }) {
-    const destination = destinations.find(({ name }) => name === target.value) || { name: '' };
+    const destination = this._eventsModel.destinations.find(({ name }) => name === target.value) || { name: '' };
     this.updateData({ destination });
   }
 
@@ -147,7 +150,6 @@ class AddEventFormView extends Smart {
     } else {
       this.updateData({ offers: [...this._data.offers.filter((offer) => offer.title !== title)] });
     }
-
   }
 
   _priceChangeHandler({target}) {

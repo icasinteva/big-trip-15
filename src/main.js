@@ -9,12 +9,11 @@ import { RenderPosition, UpdateType, MenuItem } from './enums';
 import Api from './api.js';
 
 const bodyElement = document.querySelector('body.page-body');
+let statisticsComponent = null;
 const eventsModel = new EventsModel();
 const filtersModel = new FiltersModel();
-const api = new Api(END_POINT, AUTHORIZATION);
 const siteMenuComponent = new SiteMenuView();
-let statisticsComponent = null;
-
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const tripPresenter = new Trip(bodyElement, filtersModel, eventsModel, api);
 
@@ -42,11 +41,19 @@ siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 tripPresenter.init();
 
-api.getEvents()
-  .then((events) => {
+Promise.all([
+  api.getEvents(),
+  api.getDestinations(),
+  api.getOffers(),
+])
+  .then(([events, destinations, offers]) => {
+    eventsModel.destinations = destinations;
+    eventsModel.offers = offers;
     eventsModel.setEvents(UpdateType.INIT, events);
   })
   .catch(() => {
+    eventsModel.destinations = [];
+    eventsModel.offers = [];
     eventsModel.setEvents(UpdateType.INIT, []);
   });
 

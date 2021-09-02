@@ -9,43 +9,36 @@ class EventsModel extends AbstractObserver {
   }
 
   static adaptToClient(event) {
+    const {id, offers, destination, type} = event;
     const adaptedEvent = Object.assign({},
-      event,
       {
         price: event['base_price'],
         startDate: dayjs(event['date_from']),
         endDate: dayjs(event['date_to']),
         isFavorite: event['is_favorite'],
-        eventType: event.type,
+        eventType: type,
+        offers,
+        destination,
+        id,
       },
     );
-
-    delete adaptedEvent['base_price'];
-    delete adaptedEvent['date_from'];
-    delete adaptedEvent['date_to'];
-    delete adaptedEvent['is_favorite'];
-    delete adaptedEvent.type;
 
     return adaptedEvent;
   }
 
   static adaptToServer(event) {
-    const { price, startDate, endDate, isFavorite, eventType } = event;
+    const { price, startDate, endDate, isFavorite, eventType, id, offers, destination } = event;
     const adaptedEvent = Object.assign({},
-      event,
       {
         'base_price': price,
         'date_from': startDate,
         'date_to': endDate,
         'is_favorite': isFavorite,
         type: eventType,
+        id,
+        offers,
+        destination,
       });
-
-    delete adaptedEvent.price;
-    delete adaptedEvent.startDate;
-    delete adaptedEvent.endDate;
-    delete adaptedEvent.isFavorite;
-    delete adaptedEvent.eventType;
 
     return adaptedEvent;
   }

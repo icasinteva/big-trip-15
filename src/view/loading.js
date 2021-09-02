@@ -4,8 +4,10 @@ const createNoTaskTemplate = () => (
   '<p class="trip-events__msg">Loading...</p>'
 );
 
-export default class Loading extends AbstractView {
+class Loading extends AbstractView {
   getTemplate() {
     return createNoTaskTemplate();
   }
 }
+
+export default Loading;

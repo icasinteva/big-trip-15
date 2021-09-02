@@ -1,8 +1,7 @@
 import { EventType } from '../enums';
-import { destinations } from '../mock/destinations';
 import { humanizeEventDate } from './common';
 
-const createFormTemplate = (data) => {
+const createFormTemplate = (destinations, data) => {
   const { eventType, destination = {name: ''}, price, id } =
     data;
   const startDate = humanizeEventDate(data.startDate);

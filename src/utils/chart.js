@@ -54,7 +54,7 @@ const renderChart = (container, { labels, data, formatter, title }) => new Chart
           display: false,
           drawBorder: false,
         },
-        minBarLength: 50,
+        minBarLength: 80,
       }],
     },
     legend: {

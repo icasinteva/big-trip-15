@@ -5,12 +5,7 @@ const Method = {
   PUT: 'PUT',
 };
 
-const SuccessHTTPStatusRange = {
-  MIN: 200,
-  MAX: 299,
-};
-
-export default class Api {
+class Api {
   constructor(endPoint, authorization) {
     this._endPoint = endPoint;
     this._authorization = authorization;
@@ -60,10 +55,7 @@ export default class Api {
   }
 
   static checkStatus(response) {
-    if (
-      response.status < SuccessHTTPStatusRange.MIN ||
-        response.status > SuccessHTTPStatusRange.MAX
-    ) {
+    if (!response.ok) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
 
@@ -78,3 +70,5 @@ export default class Api {
     throw err;
   }
 }
+
+export default Api;

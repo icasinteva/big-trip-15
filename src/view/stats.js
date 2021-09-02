@@ -9,7 +9,7 @@ const prepareChartData = (events, callback) => {
   Object.values(EventType).forEach((type) => {
     const evs = events.filter((evt) => evt.eventType === type);
 
-    res.push(evs.length ? callback(evs) : null);
+    res.push(evs.length ? callback(evs) : 0);
   });
 
   return res;

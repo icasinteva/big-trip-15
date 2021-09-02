@@ -148,7 +148,7 @@ class Trip {
 
   _renderAddEventForm() {
     this._addEventFormListItemComponent = new EventsListItemView();
-    this._addEventFormComponent = new AddEventFormView();
+    this._addEventFormComponent = new AddEventFormView(this._eventsModel);
 
     render(this._addEventFormListItemComponent, this._addEventFormComponent, RenderPosition.AFTERBEGIN);
     render(this._eventsListComponent, this._addEventFormListItemComponent, RenderPosition.AFTERBEGIN);
@@ -196,7 +196,7 @@ class Trip {
       updateEvent: this._handleViewAction,
       changeMode: this._handleModeChange,
     };
-    const eventPresenter = new Event(this._eventsListComponent, handlers);
+    const eventPresenter = new Event(this._eventsListComponent, this._eventsModel, handlers);
     eventPresenter.init(event);
     this._eventPresenter.set(event.id, eventPresenter);
   }

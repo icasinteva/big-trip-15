@@ -74,4 +74,4 @@ const MenuItem = {
   STATS: 'Stats',
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, DestinationData, Keydown, UserAction, UpdateType, MenuItem };
+export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, Keydown, UserAction, UpdateType, MenuItem };

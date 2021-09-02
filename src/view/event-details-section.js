@@ -1,16 +1,16 @@
 import AbstractView from './abstract';
 import { createElement, render } from '../utils/render';
 import { RenderPosition } from '../enums';
-import { availableOffers } from '../mock/offers';
 import DestinationSectionView from './destination-section';
 import OffersSectionView from './offers-section';
 
 
 const createEventDetailsTemaplate = () => '<section class="event__details"></section>';
 class EventDetailsView extends AbstractView {
-  constructor(data, offersChangeHandler) {
+  constructor(data, availableOffers, offersChangeHandler) {
     super();
     this._data = data;
+    this._availableOffers = availableOffers;
     this._offersChangeHandler = offersChangeHandler;
   }
 
@@ -23,18 +23,19 @@ class EventDetailsView extends AbstractView {
       const { destination, eventType, offers } = this._data;
       if (destination) {
         const { description, pictures = [] } = destination;
-        const availableEventOffers = (availableOffers || []).find((item) => item.type === eventType).offers;
+        const availableEventTypeOffers = (this._availableOffers || []).find((item) => item.type === eventType).offers;
         const selectedEventTypeOffers = offers;
-
 
         let eventOffersToshow = [];
 
-        if (availableEventOffers && selectedEventTypeOffers) {
-          eventOffersToshow = availableEventOffers.map((obj) => Object.assign({}, obj));
-          selectedEventTypeOffers.forEach((selected) => {
-            const index = eventOffersToshow.findIndex((s) => s.title === selected.title);
-            if (index !== -1) {
-              eventOffersToshow[index].selected = true;
+        if (availableEventTypeOffers && selectedEventTypeOffers) {
+          eventOffersToshow = availableEventTypeOffers.map((obj) => Object.assign({}, obj));
+
+          selectedEventTypeOffers.forEach(({title}) => {
+            const selectedOffer = eventOffersToshow.find((s) => s.title === title);
+
+            if (selectedOffer) {
+              selectedOffer.selected = true;
             }
           });
         }
