@@ -1,7 +1,7 @@
 import AbstractView from './abstract';
 
-const createGallerySectionTemplate = (photos = []) => {
-  const images = photos.map((photo) => `<img class="event__photo" src=${photo.src} alt="Event photo">`).join('');
+const createGallerySectionTemplate = (pictures = []) => {
+  const images = pictures.map((photo) => `<img class="event__photo" src=${photo.src} alt="Event photo">`).join('');
 
   return `<div class="event__photos-container">
               <div class="event__photos-tape">
@@ -11,13 +11,13 @@ const createGallerySectionTemplate = (photos = []) => {
 };
 
 class GallerySectionView extends AbstractView {
-  constructor(photos = []) {
+  constructor(pictures = []) {
     super();
-    this._photos = photos;
+    this._pictures = pictures;
   }
 
   getTemplate() {
-    return createGallerySectionTemplate(this._photos);
+    return createGallerySectionTemplate(this._pictures);
   }
 }
 

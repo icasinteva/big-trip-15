@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { Sorting, Keydown } from '../enums';
 import AbstractView from '../view/abstract';
 
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));

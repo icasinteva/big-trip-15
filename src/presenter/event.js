@@ -11,8 +11,9 @@ const Mode = {
 };
 
 class Event {
-  constructor(eventsListContainer, {updateEvent, changeMode}) {
+  constructor(eventsListContainer, eventsModel, {updateEvent, changeMode}) {
     this._eventsListContainer = eventsListContainer;
+    this._eventsModel = eventsModel;
     this._updateEvent = updateEvent;
     this._changeMode = changeMode;
 
@@ -38,7 +39,7 @@ class Event {
 
     this._eventListItemComponent = new EventsListItemView();
     this._eventComponent = new EventView(this._event);
-    this._eventEditComponent = new EventEditView(this._event);
+    this._eventEditComponent = new EventEditView(this._eventsModel, this._event);
 
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventComponent.setEditClickHanlder(this._handleEditClick);

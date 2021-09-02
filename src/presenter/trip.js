@@ -1,3 +1,4 @@
+import LoadingView from '../view/loading';
 import Event from './event';
 import Filters from '../presenter/filters';
 import EventsSortView from '../view/events-sort';
@@ -12,11 +13,14 @@ import { filterTypeToCallBack } from '../utils/filters';
 import { onEscKeyDown, contains, sortTypeToCallBack} from '../utils/common';
 import TripInfoView from '../view/trip-info';
 import { DEFAULT_SORTING } from '../const';
+
 class Trip {
-  constructor(pageContainer, filtersModel, eventsModel) {
+  constructor(pageContainer, filtersModel, eventsModel, api) {
+    this._api = api;
     this._eventsModel = eventsModel;
     this._filtersModel = filtersModel;
     this._sortType = Sorting.DAY;
+    this._isLoading = true;
 
     this._headerElement = pageContainer.querySelector('.page-header .trip-main');
     this._controlsElement = this._headerElement.querySelector('.trip-controls');
@@ -29,7 +33,7 @@ class Trip {
     this._eventsListComponent = null;
     this._noEventsComponent = null;
     this._addEventButtonComponent = new AddEventButtonView();
-
+    this._loadingComponent = new LoadingView();
 
     this._handleEventAdd = this._handleEventAdd.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -75,7 +79,9 @@ class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT: {
-        this._eventsModel.updateEvent(updateType, update);
+        this._api.updateEvent(update).then((response) => {
+          this._eventsModel.updateEvent(updateType, response);
+        });
         break;
       }
       case UserAction.ADD_EVENT: {
@@ -95,7 +101,6 @@ class Trip {
         this._eventPresenter.get(data.id).init(data);
         break;
       }
-
       case UpdateType.MINOR: {
         this._clearTrip();
         this._renderTrip();
@@ -103,6 +108,12 @@ class Trip {
       }
       case UpdateType.MAJOR: {
         this._clearTrip({resetSortType: true, removeTripInfo: true});
+        this._renderTrip();
+        break;
+      }
+      case UpdateType.INIT: {
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderTrip();
         break;
       }
@@ -137,7 +148,7 @@ class Trip {
 
   _renderAddEventForm() {
     this._addEventFormListItemComponent = new EventsListItemView();
-    this._addEventFormComponent = new AddEventFormView();
+    this._addEventFormComponent = new AddEventFormView(this._eventsModel);
 
     render(this._addEventFormListItemComponent, this._addEventFormComponent, RenderPosition.AFTERBEGIN);
     render(this._eventsListComponent, this._addEventFormListItemComponent, RenderPosition.AFTERBEGIN);
@@ -185,7 +196,7 @@ class Trip {
       updateEvent: this._handleViewAction,
       changeMode: this._handleModeChange,
     };
-    const eventPresenter = new Event(this._eventsListComponent, handlers);
+    const eventPresenter = new Event(this._eventsListComponent, this._eventsModel, handlers);
     eventPresenter.init(event);
     this._eventPresenter.set(event.id, eventPresenter);
   }
@@ -195,23 +206,8 @@ class Trip {
     render(this._tripContainer , this._eventsListComponent, RenderPosition.BEFOREEND);
   }
 
-  _removeTripInfo() {
-    remove(this._tripInfoComponent);
-    this._tripInfoComponent = null;
-  }
-
-  _removeSort() {
-    remove(this._eventsSortComponent);
-    this._eventsSortComponent = null;
-  }
-
-  _replaceEventsListToNoEvents(eventsListComponent) {
-    if (!this._noEventsComponent) {
-      this._noEventsComponent = new NoEventsView(this._filterType);
-    }
-
-    this._removeSort();
-    replace(this._noEventsComponent, eventsListComponent);
+  _renderLoading() {
+    render(this._tripContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderNoEvents(filterType) {
@@ -227,7 +223,7 @@ class Trip {
     remove(this._eventsSortComponent);
     remove(this._noEventsComponent);
     remove(this._eventsListComponent);
-
+    remove(this._loadingComponent);
     this._addEventButtonComponent.setDisabled(false);
 
     if (disableAddBtn) {
@@ -249,6 +245,11 @@ class Trip {
 
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const events = this._getEvents();
     const eventsCount = events.length;
     const filter = this._filtersModel.getFilter();
@@ -275,11 +276,6 @@ class Trip {
     }
     this._renderSort();
     this._renderEventsList(events);
-  }
-
-  _reRenderTrip() {
-    this._clearTrip();
-    this._renderTrip();
   }
 }
 

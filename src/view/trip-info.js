@@ -1,11 +1,16 @@
+import { DESTINATIONS_TO_SHOW } from '../const';
 import { createPriceTemplate } from '../utils/render';
 import { calculateTripCost, getTripRange, getDestinations } from '../utils/trip-info';
 import AbstractView from './abstract';
 
 const createTripInfoTemplate = (events) => {
   const { startDate, endDate } = getTripRange(events);
-  const destinations = getDestinations(events);
+  let destinations = getDestinations(events);
   const price = calculateTripCost(events);
+
+  if (destinations.length > DESTINATIONS_TO_SHOW) {
+    destinations = [destinations[0], '...', destinations[destinations.length - 1]];
+  }
 
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">

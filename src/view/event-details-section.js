@@ -1,15 +1,16 @@
 import AbstractView from './abstract';
 import { createElement, render } from '../utils/render';
-import { RenderPosition, DestinationData } from '../enums';
+import { RenderPosition } from '../enums';
 import DestinationSectionView from './destination-section';
 import OffersSectionView from './offers-section';
 
 
 const createEventDetailsTemaplate = () => '<section class="event__details"></section>';
 class EventDetailsView extends AbstractView {
-  constructor(data, offersChangeHandler) {
+  constructor(data, availableOffers, offersChangeHandler) {
     super();
     this._data = data;
+    this._availableOffers = availableOffers;
     this._offersChangeHandler = offersChangeHandler;
   }
 
@@ -19,35 +20,28 @@ class EventDetailsView extends AbstractView {
 
   getElement() {
     if (!this._element) {
-      const { destination, eventType } = this._data;
+      const { destination, eventType, offers } = this._data;
       if (destination) {
-        const { description, photos = [] } = DestinationData[destination];
-        const availableEventOffers = DestinationData[destination].offers[eventType];
-        const selectedEventTypeOffers = this._data.offers;
+        const { description, pictures = [] } = destination;
+        const availableEventTypeOffers = (this._availableOffers || []).find((item) => item.type === eventType).offers;
+        const selectedEventTypeOffers = offers;
 
         let eventOffersToshow = [];
 
-        if (availableEventOffers && selectedEventTypeOffers) {
-          for (let i = 0; i < availableEventOffers.length; i++) {
-            const eventOfferToShow = Object.assign({}, availableEventOffers[i]);
+        if (availableEventTypeOffers && selectedEventTypeOffers) {
+          eventOffersToshow = availableEventTypeOffers.map((obj) => Object.assign({}, obj));
 
-            for (let j = 0; j < selectedEventTypeOffers.length; j++) {
-              const selectedOffer = Object.assign({}, selectedEventTypeOffers[j]);
+          selectedEventTypeOffers.forEach(({title}) => {
+            const selectedOffer = eventOffersToshow.find((s) => s.title === title);
 
-              if (eventOfferToShow.title === selectedOffer.title) {
-                eventOfferToShow.selected = true;
-                continue;
-              }
+            if (selectedOffer) {
+              selectedOffer.selected = true;
             }
-            eventOffersToshow.push(Object.assign({}, eventOfferToShow));
-          }
-        } else if (availableEventOffers) {
-          eventOffersToshow = [...availableEventOffers];
+          });
         }
 
         const offersSectionComponent = new OffersSectionView(eventOffersToshow, this._offersChangeHandler);
-        const destinationSectionComponent = new DestinationSectionView(description, photos);
-
+        const destinationSectionComponent = new DestinationSectionView(description, pictures);
 
         if (offersSectionComponent.getElement() || destinationSectionComponent.getElement()) {
           this._element = createElement(this.getTemplate());

@@ -6,13 +6,16 @@ import { createFormTemplate } from '../utils/add-edit-form';
 import Smart from './smart';
 import EventDetailsView from './event-details-section';
 import flatpickr from 'flatpickr';
+import Api from '../api';
+import { END_POINT, AUTHORIZATION } from '../const';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { humanizeEventDate, transformDateToUsFormat } from '../utils/common';
 
 class AddEventFormView extends Smart {
-  constructor(event = BLANK_EVENT) {
+  constructor(eventsModel, event = BLANK_EVENT) {
     super();
+    this._eventsModel = eventsModel;
     this._data = AddEventFormView.parseEventToData(event);
     this._startDatePicker = null;
     this._endDatePicker = null;
@@ -24,6 +27,7 @@ class AddEventFormView extends Smart {
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._cancelClickHandler = this._cancelClickHandler.bind(this);
     this._saveClickHandler = this._saveClickHandler.bind(this);
+    this._api = new Api(END_POINT, AUTHORIZATION);
 
     this._setInnerHandlers();
     this._setDatepickers();
@@ -55,14 +59,14 @@ class AddEventFormView extends Smart {
   }
 
   getTemplate() {
-    return createFormTemplate(this._data);
+    return createFormTemplate(this._eventsModel.destinations, this._data);
   }
 
   getElement() {
     if (!this._element) {
       this._element  = createElement(this.getTemplate());
 
-      render(this._element, new EventDetailsView(this._data, this._offersChangeHandler).getElement(), RenderPosition.BEFOREEND);
+      render(this._element, new EventDetailsView(this._data, this._eventsModel.offers, this._offersChangeHandler).getElement(), RenderPosition.BEFOREEND);
     }
 
     return this._element;
@@ -71,6 +75,9 @@ class AddEventFormView extends Smart {
   restoreHandlers() {
     this._setInnerHandlers();
     this._setDatepickers();
+    if (this.setExitEditModeListener) {
+      this.setExitEditModeListener(this._callback.exitEditMode);
+    }
     this.setCancelClickHandler(this._callback.cancelClick);
     this.setSaveClickHandler(this._callback.saveClick);
   }
@@ -123,8 +130,9 @@ class AddEventFormView extends Smart {
     this.updateData({ eventType: target.value });
   }
 
-  _destinationChangeHandler({target}) {
-    this.updateData({ destination: target.value });
+  _destinationChangeHandler({ target }) {
+    const destination = this._eventsModel.destinations.find(({ name }) => name === target.value) || { name: '' };
+    this.updateData({ destination });
   }
 
   _startDateChangeHandler([startDate]) {
@@ -135,9 +143,13 @@ class AddEventFormView extends Smart {
     this.updateData({endDate: humanizeEventDate(endDate)});
   }
 
-  _offersChangeHandler({target}) {
+  _offersChangeHandler({ target }) {
     const { price, title } = target.dataset;
-    this.updateData({ offers: [...this._data.offers, { id: target.name, price: +price, title }] });
+    if (target.checked) {
+      this.updateData({ offers: [...this._data.offers, { id: target.name, price: +price, title }] });
+    } else {
+      this.updateData({ offers: [...this._data.offers.filter((offer) => offer.title !== title)] });
+    }
   }
 
   _priceChangeHandler({target}) {
