@@ -7,15 +7,17 @@ import StatsView from './view/stats';
 import { render, remove } from './utils/render';
 import { RenderPosition, UpdateType, MenuItem } from './enums';
 import Api from './api.js';
+import SortingModel from './model/sorting';
 
 const bodyElement = document.querySelector('body.page-body');
 let statisticsComponent = null;
 const eventsModel = new EventsModel();
 const filtersModel = new FiltersModel();
+const sortingModel = new SortingModel();
 const siteMenuComponent = new SiteMenuView();
 const api = new Api(END_POINT, AUTHORIZATION);
 
-const tripPresenter = new Trip(bodyElement, filtersModel, eventsModel, api);
+const tripPresenter = new Trip(bodyElement, filtersModel, sortingModel, eventsModel, api);
 
 render(bodyElement.querySelector('.trip-controls'), siteMenuComponent, RenderPosition.BEFOREEND);
 

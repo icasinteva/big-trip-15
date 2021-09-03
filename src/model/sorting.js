@@ -1,7 +1,7 @@
 import AbstractObserver from '../utils/abstract-observer';
 import { DEFAULT_SORTING } from '../const';
 
-class Sorting extends AbstractObserver {
+class SortingModel extends AbstractObserver {
   constructor() {
     super();
     this._activeSorting = DEFAULT_SORTING;
@@ -16,4 +16,4 @@ class Sorting extends AbstractObserver {
   }
 }
 
-export default Sorting;
+export default SortingModel;
