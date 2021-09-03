@@ -1,6 +1,6 @@
 import EventsListItemView from '../view/events-list-item';
 import EventView from '../view/event';
-import EventEditView from '../view/event-edit';
+import EventFormView from '../view/event-add-edit';
 import { RenderPosition, UserAction, UpdateType } from '../enums';
 import { render, replace, remove } from '../utils/render.js';
 import { onEscKeyDown } from '../utils/common';
@@ -10,7 +10,13 @@ const Mode = {
   EDIT: 'EDIT',
 };
 
-class Event {
+const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
+class EventPresenter {
   constructor(eventsListContainer, eventsModel, {updateEvent, changeMode}) {
     this._eventsListContainer = eventsListContainer;
     this._eventsModel = eventsModel;
@@ -39,7 +45,7 @@ class Event {
 
     this._eventListItemComponent = new EventsListItemView();
     this._eventComponent = new EventView(this._event);
-    this._eventEditComponent = new EventEditView(this._eventsModel, this._event);
+    this._eventEditComponent = new EventFormView(this._eventsModel, this._event);
 
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventComponent.setEditClickHanlder(this._handleEditClick);
@@ -59,7 +65,8 @@ class Event {
     }
 
     if (this._mode === Mode.EDIT) {
-      replace(this._eventEditComponent, prevEventEditComponent);
+      replace(this._eventComponent, prevEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevEventComponent);
@@ -74,6 +81,42 @@ class Event {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToEvent();
+    }
+  }
+
+  setViewState(state) {
+    if (this._mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this._eventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING: {
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      }
+      case State.DELETING: {
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      }
+      case State.ABORTING: {
+        this._eventComponent.shake(resetFormState);
+        this._eventEditComponent.shake(resetFormState);
+        break;
+      }
     }
   }
 
@@ -98,10 +141,9 @@ class Event {
   _handleSaveClick(event) {
     this._updateEvent(
       UserAction.UPDATE_EVENT,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       event,
     );
-    this._handleExitEditModeClick();
   }
 
   _handleDeleteClick(event) {
@@ -129,4 +171,5 @@ class Event {
   }
 }
 
-export default Event;
+export { State };
+export default EventPresenter;

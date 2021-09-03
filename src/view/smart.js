@@ -10,7 +10,7 @@ class Smart extends AbstractView {
     throw new Error('Abstract method not implemented: resetHandlers');
   }
 
-  updateData(update) {
+  updateData(update, updateOnlyData = false) {
     if (!update) {
       return;
     }
@@ -21,7 +21,9 @@ class Smart extends AbstractView {
       update,
     );
 
-    this.updateElement();
+    if (!updateOnlyData) {
+      this.updateElement();
+    }
   }
 
   updateElement() {

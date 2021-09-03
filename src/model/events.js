@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import AbstractObserver from '../utils/abstract-observer';
-import { updateItem, addItem, deleteItem } from '../utils/common';
+import { updateItem, addItem, deleteItem } from '../utils/event';
 
 class EventsModel extends AbstractObserver {
   constructor() {
@@ -10,35 +10,32 @@ class EventsModel extends AbstractObserver {
 
   static adaptToClient(event) {
     const {id, offers, destination, type} = event;
-    const adaptedEvent = Object.assign({},
-      {
-        price: event['base_price'],
-        startDate: dayjs(event['date_from']),
-        endDate: dayjs(event['date_to']),
-        isFavorite: event['is_favorite'],
-        eventType: type,
-        offers,
-        destination,
-        id,
-      },
-    );
+    const adaptedEvent = {
+      price: event['base_price'],
+      startDate: dayjs(event['date_from']),
+      endDate: dayjs(event['date_to']),
+      isFavorite: event['is_favorite'],
+      eventType: type,
+      offers,
+      destination,
+      id,
+    };
 
     return adaptedEvent;
   }
 
   static adaptToServer(event) {
-    const { price, startDate, endDate, isFavorite, eventType, id, offers, destination } = event;
-    const adaptedEvent = Object.assign({},
-      {
-        'base_price': price,
-        'date_from': startDate,
-        'date_to': endDate,
-        'is_favorite': isFavorite,
-        type: eventType,
-        id,
-        offers,
-        destination,
-      });
+    const { price, startDate, endDate, isFavorite = false, eventType, id, offers, destination } = event;
+    const adaptedEvent = {
+      'base_price': price,
+      'date_from': startDate,
+      'date_to': endDate,
+      'is_favorite': isFavorite,
+      type: eventType,
+      id,
+      offers,
+      destination,
+    };
 
     return adaptedEvent;
   }

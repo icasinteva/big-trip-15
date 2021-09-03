@@ -24,7 +24,6 @@ const getTripRange = (events) => {
 };
 
 const getDestinations = (events) => {
-
   const start = events[0].destination.name;
   const end = events[events.length - 1].destination.name;
 

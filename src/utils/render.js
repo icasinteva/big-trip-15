@@ -9,6 +9,18 @@ const createElement = (template) => {
   return newElement.firstElementChild;
 };
 
+const contains = (component, child) => {
+  if (component instanceof AbstractView) {
+    component = component.getElement();
+  }
+
+  if (child instanceof AbstractView) {
+    child = child.getElement();
+  }
+
+  return component.contains(child);
+};
+
 const render = (container, child, place) => {
   if (container instanceof AbstractView) {
     container = container.getElement();
@@ -70,10 +82,4 @@ const remove = (component) => {
 const createPriceTemplate = (className, amount) =>
   `€&nbsp;<span class="${className}-value">${amount}</span>`;
 
-const renderEventDetailsSection = (container, eventDetailsComponent) => {
-  remove(container.queryChildElement('.event__details'));
-  render(container, eventDetailsComponent, RenderPosition.BEFOREEND);
-};
-
-
-export {createElement, render, replace, remove, createPriceTemplate, renderEventDetailsSection};
+export {createElement, contains, render, replace, remove, createPriceTemplate};

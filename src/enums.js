@@ -15,28 +15,6 @@ const EventType = {
   SIGHTSEEING: 'sightseeing',
   RESTAURANT: 'restaurant',
 };
-const Destination = {
-  AMSTERDAM: 'Amsterdam',
-  GENEVA: 'Geneva',
-  CHAMONIX: 'Chamonix',
-  WARSAW: 'Warsaw',
-};
-const OfferId = {
-  LUGGAGE: 'event-offer-luggage',
-  COMFORT: 'event-offer-comfort',
-  MEAL: 'event-offer-meal',
-  SEATS: 'event-offer-seats',
-  TRAIN: 'event-offer-train',
-  UBER: 'event-offer-uber',
-};
-const OfferName = {
-  LUGGAGE: 'Add luggage',
-  COMFORT: 'Switch to comfort',
-  MEAL: 'Add meal',
-  SEATS: 'Choose seats',
-  TRAIN: 'Travel by train',
-  UBER: 'Order uber',
-};
 
 const Sorting = {
   DAY: 'day',
@@ -74,4 +52,4 @@ const MenuItem = {
   STATS: 'Stats',
 };
 
-export { RenderPosition, EventType, Destination, OfferId, OfferName, Filter, Sorting, Keydown, UserAction, UpdateType, MenuItem };
+export { RenderPosition, EventType, Filter, Sorting, Keydown, UserAction, UpdateType, MenuItem };

@@ -54,5 +54,13 @@ const generateDestination = () => {
   ];
 };
 
+const addItem = (items, newItem) => [
+  newItem,
+  ...items,
+];
 
-export {generateDate, getDuration, generateEventType, generateDestination};
+const updateItem = (items, updatedItem) => items.map((item) => item.id === updatedItem.id ? updatedItem : item);
+
+const deleteItem = (items, deletedItem) => items.filter(({ id }) => id !== deletedItem.id);
+
+export { generateDate, getDuration, generateEventType, generateDestination, updateItem, addItem, deleteItem};
