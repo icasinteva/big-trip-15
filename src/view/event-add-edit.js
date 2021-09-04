@@ -6,7 +6,7 @@ import { createFormTemplate } from '../utils/add-edit-form';
 import Smart from './smart';
 import EventDetailsView from './event-details-section';
 import flatpickr from 'flatpickr';
-import Api from '../api';
+import Api from '../api/api';
 import { END_POINT, AUTHORIZATION } from '../const';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -133,7 +133,7 @@ class EventFormView extends Smart {
       this.queryChildElement('[name="event-start-time"]'),
       {
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._data.startDate,
+        defaultDate: new Date(this._data.startDate),
         minDate: 'today',
         enableTime:true,
         allowInput: true,
@@ -146,8 +146,8 @@ class EventFormView extends Smart {
       this.queryChildElement('[name="event-end-time"]'),
       {
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._data.endDate,
-        minDate: this._data.startDate,
+        defaultDate: new Date(this._data.endDate),
+        minDate: new Date(this._data.startDate),
         enableTime:true,
         allowInput: true,
         'time_24hr': true,

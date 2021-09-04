@@ -8,8 +8,8 @@ import { RenderPosition } from '../enums';
 const createEventTemplate = (event) => {
   const { eventType, destination, startDate, endDate, price, isFavorite } =
     event;
-  const startTime = humanizeEventDate(startDate, 'HH:MM');
-  const endTime = humanizeEventDate(endDate, 'HH:MM');
+  const startTime = humanizeEventDate(startDate, 'HH:mm');
+  const endTime = humanizeEventDate(endDate, 'HH:mm');
   const duration = getDuration(startDate, endDate);
   const favoriteClassName = isFavorite
     ? 'event__favorite-btn event__favorite-btn--active'

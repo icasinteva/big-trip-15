@@ -3,7 +3,8 @@ import EventView from '../view/event';
 import EventFormView from '../view/event-add-edit';
 import { RenderPosition, UserAction, UpdateType } from '../enums';
 import { render, replace, remove } from '../utils/render.js';
-import { onEscKeyDown } from '../utils/common';
+import { onEscKeyDown, isOnline } from '../utils/common';
+import { toast } from '../utils/toast';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -129,6 +130,10 @@ class EventPresenter {
 
 
   _handleEditClick() {
+    if (!isOnline()) {
+      toast('You can\'t edit event offline');
+      return;
+    }
     this._replaceEventToForm();
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
@@ -139,6 +144,10 @@ class EventPresenter {
   }
 
   _handleSaveClick(event) {
+    if (!isOnline()) {
+      toast('You can\'t save event offline');
+      return;
+    }
     this._updateEvent(
       UserAction.UPDATE_EVENT,
       UpdateType.MAJOR,
@@ -147,6 +156,10 @@ class EventPresenter {
   }
 
   _handleDeleteClick(event) {
+    if (!isOnline()) {
+      toast('You can\'t delete event offline');
+      return;
+    }
     this._updateEvent(
       UserAction.DELETE_EVENT,
       UpdateType.MAJOR,
@@ -162,7 +175,6 @@ class EventPresenter {
     this._changeMode();
     replace(this._eventEditComponent, this._eventComponent);
     this._mode = Mode.EDIT;
-
   }
 
   _replaceFormToEvent() {

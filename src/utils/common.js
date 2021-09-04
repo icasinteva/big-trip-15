@@ -36,10 +36,13 @@ const onEscKeyDown = (evt, callback) => {
   }
 };
 
+const isOnline = () => window.navigator.onLine;
+
 export {
   getRandomInteger,
   humanizeEventDate,
   humanizeEventStartDate,
   transformDateToUsFormat,
-  onEscKeyDown
+  onEscKeyDown,
+  isOnline
 };
