@@ -1,6 +1,6 @@
 import EventsModel from '../model/events.js';
 import { isOnline } from '../utils/common.js';
-import { StorageTypes } from '../enums.js';
+import { StorageType } from '../enums.js';
 
 const getSyncedEvents = (items) =>
   items
@@ -25,12 +25,12 @@ class Provider {
       return this._api.getEvents()
         .then((events) => {
           const items = createStoreStructure(events.map(EventsModel.adaptToServer));
-          this._store.setItems(items, StorageTypes.EVENTS);
+          this._store.setItems(items, StorageType.EVENTS);
           return events;
         });
     }
 
-    const storeEvents = Object.values(this._store.getItems(StorageTypes.EVENTS));
+    const storeEvents = Object.values(this._store.getItems(StorageType.EVENTS));
 
     return Promise.resolve(storeEvents.map(EventsModel.adaptToClient));
   }
@@ -39,12 +39,12 @@ class Provider {
     if (isOnline()) {
       return this._api.getDestinations()
         .then((destinations) => {
-          this._store.setItems(destinations, StorageTypes.DESTINATIONS);
+          this._store.setItems(destinations, StorageType.DESTINATIONS);
           return destinations;
         });
     }
 
-    const storeDestinations = Object.values(this._store.getItems(StorageTypes.DESTINATIONS));
+    const storeDestinations = Object.values(this._store.getItems(StorageType.DESTINATIONS));
 
     return Promise.resolve(storeDestinations);
   }
@@ -53,12 +53,12 @@ class Provider {
     if (isOnline()) {
       return this._api.getOffers()
         .then((offers) => {
-          this._store.setItems(offers, StorageTypes.OFFERS);
+          this._store.setItems(offers, StorageType.OFFERS);
           return offers;
         });
     }
 
-    const storeOffers = Object.values(this._store.getItems(StorageTypes.OFFERS));
+    const storeOffers = Object.values(this._store.getItems(StorageType.OFFERS));
 
     return Promise.resolve(storeOffers);
   }

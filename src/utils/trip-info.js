@@ -1,5 +1,5 @@
 
-import { DESTINATIONS_TO_SHOW } from '../const';
+import { MIN_DESTINATIONS_TO_SHOW, DESTINATIONS_TO_SHOW } from '../const';
 import { humanizeEventStartDate } from '../utils/common';
 
 const calculateTripCost = (arr) =>
@@ -28,7 +28,7 @@ const getDestinations = (events) => {
   const start = events[0].destination.name;
   const end = events[events.length - 1].destination.name;
 
-  if (events.length === 1) {
+  if (events.length === MIN_DESTINATIONS_TO_SHOW) {
     return [start];
   } else if (events.length > DESTINATIONS_TO_SHOW) {
     return [start, '...', end].join(' — ');
