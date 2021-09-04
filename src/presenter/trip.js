@@ -9,6 +9,8 @@ import { Sorting, RenderPosition, UserAction, UpdateType } from '../enums';
 import { contains, render, remove, replace } from '../utils/render.js';
 import { filterTypeToCallBack } from '../utils/filters';
 import { sortTypeToCallBack } from '../utils/sorting';
+import { isOnline } from '../utils/common';
+import { toast } from '../utils/toast';
 import TripInfoView from '../view/trip-info';
 import { DEFAULT_SORTING } from '../const';
 import EventForm from './eventForm';
@@ -141,6 +143,10 @@ class Trip {
   }
 
   _handleEnterAddMode() {
+    if (!isOnline()) {
+      toast('You can\'t create new event offline');
+      return;
+    }
     if (contains(this._tripContainer, this._noEventsComponent)) {
       replace(this._eventsListComponent, this._noEventsComponent);
     }

@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { EventType, Destination } from '../enums';
 import { getRandomInteger } from '../utils/common';
 
 const generateDate = () => {
@@ -40,19 +39,6 @@ const getDuration = (startDate, endDate) => {
   return res.length ? res.join(' ') : '0D 0H 0M';
 };
 
-const generateEventType = () => {
-  const eventTypes = Object.keys(EventType);
-  return EventType[
-    eventTypes[getRandomInteger(0, eventTypes.length - 1)]
-  ];
-};
-
-const generateDestination = () => {
-  const destinations = Object.keys(Destination);
-  return Destination[
-    destinations[getRandomInteger(0, destinations.length - 1)]
-  ];
-};
 
 const addItem = (items, newItem) => [
   newItem,
@@ -63,4 +49,4 @@ const updateItem = (items, updatedItem) => items.map((item) => item.id === updat
 
 const deleteItem = (items, deletedItem) => items.filter(({ id }) => id !== deletedItem.id);
 
-export { generateDate, getDuration, generateEventType, generateDestination, updateItem, addItem, deleteItem};
+export { generateDate, getDuration, updateItem, addItem, deleteItem};

@@ -6,18 +6,22 @@ import SiteMenuView from './view/site-navigation';
 import StatsView from './view/stats';
 import { render, remove } from './utils/render';
 import { RenderPosition, UpdateType, MenuItem } from './enums';
-import Api from './api.js';
+import Api from './api/api';
+import { STORE_NAME } from './const';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
 import SortingModel from './model/sorting';
 
 const bodyElement = document.querySelector('body.page-body');
 let statisticsComponent = null;
+const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 const eventsModel = new EventsModel();
 const filtersModel = new FiltersModel();
 const sortingModel = new SortingModel();
 const siteMenuComponent = new SiteMenuView();
-const api = new Api(END_POINT, AUTHORIZATION);
-
-const tripPresenter = new Trip(bodyElement, filtersModel, sortingModel, eventsModel, api);
+const tripPresenter = new Trip(bodyElement, filtersModel, sortingModel, eventsModel, apiWithProvider);
 
 render(bodyElement.querySelector('.trip-controls'), siteMenuComponent, RenderPosition.BEFOREEND);
 
@@ -44,9 +48,9 @@ siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 tripPresenter.init();
 
 Promise.all([
-  api.getEvents(),
-  api.getDestinations(),
-  api.getOffers(),
+  apiWithProvider.getEvents(),
+  apiWithProvider.getDestinations(),
+  apiWithProvider.getOffers(),
 ])
   .then(([events, destinations, offers]) => {
     eventsModel.destinations = destinations;
@@ -58,4 +62,17 @@ Promise.all([
     eventsModel.offers = [];
     eventsModel.setEvents(UpdateType.INIT, []);
   });
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
+
+window.addEventListener('online', () => {
+  document.title = document.title.replace(' [offline]', '');
+  apiWithProvider.sync();
+});
+
+window.addEventListener('offline', () => {
+  document.title += ' [offline]';
+});
 

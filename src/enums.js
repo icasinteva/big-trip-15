@@ -52,4 +52,10 @@ const MenuItem = {
   STATS: 'Stats',
 };
 
-export { RenderPosition, EventType, Filter, Sorting, Keydown, UserAction, UpdateType, MenuItem };
+const StorageType = {
+  EVENTS: 'events',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers',
+};
+
+export { RenderPosition, EventType, Filter, Sorting, Keydown, UserAction, UpdateType, MenuItem, StorageType };
