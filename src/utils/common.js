@@ -14,7 +14,15 @@ const transformDateToUsFormat = (dateStr) => {
   return dayjs(`${month}/${day}/${year}`);
 };
 
-const humanizeEventDate = (dateStr, format = 'DD/MM/YY HH:mm') => {
+const transformDateForDatePicker = (dateStr) => {
+  if (typeof dateStr === 'object' && dateStr.format) {
+    return new Date(dateStr.format('YYYY-MM-DD HH:mm'));
+  }
+
+  return dateStr;
+};
+
+const humanizeEventDate = (dateStr = dayjs(), format = 'DD/MM/YY HH:mm') => {
   if (typeof dateStr === 'string') {
     dateStr = transformDateToUsFormat(dateStr);
   }
@@ -43,6 +51,7 @@ export {
   humanizeEventDate,
   humanizeEventStartDate,
   transformDateToUsFormat,
+  transformDateForDatePicker,
   onEscKeyDown,
   isOnline
 };

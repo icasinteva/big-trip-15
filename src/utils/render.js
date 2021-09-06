@@ -79,7 +79,7 @@ const remove = (component) => {
   component.removeElement();
 };
 
-const createPriceTemplate = (className, amount) =>
+const createPriceTemplate = (className, amount = 0) =>
   `€&nbsp;<span class="${className}-value">${amount}</span>`;
 
 export {createElement, contains, render, replace, remove, createPriceTemplate};

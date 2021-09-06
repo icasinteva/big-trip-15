@@ -6,8 +6,9 @@ import { getDuration } from '../utils/event';
 import { RenderPosition } from '../enums';
 
 const createEventTemplate = (event) => {
-  const { eventType, destination, startDate, endDate, price, isFavorite } =
+  const { eventType, destination = {}, startDate, endDate, price, isFavorite } =
     event;
+  const { name = '' } = destination;
   const startTime = humanizeEventDate(startDate, 'HH:mm');
   const endTime = humanizeEventDate(endDate, 'HH:mm');
   const duration = getDuration(startDate, endDate);
@@ -21,7 +22,7 @@ const createEventTemplate = (event) => {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${eventType}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${eventType} ${destination.name}</h3>
+                <h3 class="event__title">${eventType} ${name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime=${startDate.format()}>${startTime}</time>

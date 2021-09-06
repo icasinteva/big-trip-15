@@ -10,7 +10,7 @@ import Api from '../api/api';
 import { END_POINT, AUTHORIZATION } from '../const';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { humanizeEventDate, transformDateToUsFormat } from '../utils/common';
+import { humanizeEventDate, transformDateToUsFormat, transformDateForDatePicker } from '../utils/common';
 
 class EventFormView extends Smart {
   constructor(eventsModel, event = BLANK_EVENT) {
@@ -119,6 +119,9 @@ class EventFormView extends Smart {
   }
 
   _setDatepickers() {
+    const startDate = transformDateForDatePicker(this._data.startDate);
+    const endDate = transformDateForDatePicker(this._data.endDate);
+
     if (this._startDatePicker) {
       this._startDatePicker.destroy();
       this._startDatePicker = null;
@@ -133,7 +136,7 @@ class EventFormView extends Smart {
       this.queryChildElement('[name="event-start-time"]'),
       {
         dateFormat: 'd/m/y H:i',
-        defaultDate: new Date(this._data.startDate),
+        defaultDate: startDate,
         minDate: 'today',
         enableTime:true,
         allowInput: true,
@@ -146,8 +149,8 @@ class EventFormView extends Smart {
       this.queryChildElement('[name="event-end-time"]'),
       {
         dateFormat: 'd/m/y H:i',
-        defaultDate: new Date(this._data.endDate),
-        minDate: new Date(this._data.startDate),
+        defaultDate: endDate,
+        minDate: startDate,
         enableTime:true,
         allowInput: true,
         'time_24hr': true,
@@ -172,11 +175,11 @@ class EventFormView extends Smart {
   }
 
   _startDateChangeHandler([startDate]) {
-    this.updateData({startDate: humanizeEventDate(startDate)}, true);
+    this.updateData({startDate: humanizeEventDate(startDate)});
   }
 
   _endDateChangeHandler([endDate]) {
-    this.updateData({endDate: humanizeEventDate(endDate)}, true);
+    this.updateData({endDate: humanizeEventDate(endDate)});
   }
 
   _offersChangeHandler({ target }) {

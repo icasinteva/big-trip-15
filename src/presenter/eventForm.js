@@ -67,6 +67,11 @@ class EventForm {
   }
 
   _handleSaveClick(event) {
+    if (event.endDate.diff(event.startDate) < 0) {
+      this.setAborting();
+      return;
+    }
+
     this._updateEvent(
       UserAction.ADD_EVENT,
       UpdateType.MAJOR,

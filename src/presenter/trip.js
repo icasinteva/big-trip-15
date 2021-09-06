@@ -12,7 +12,7 @@ import { sortTypeToCallBack } from '../utils/sorting';
 import { isOnline } from '../utils/common';
 import { toast } from '../utils/toast';
 import TripInfoView from '../view/trip-info';
-import { DEFAULT_SORTING } from '../const';
+import { DEFAULT_FILTER, DEFAULT_SORTING } from '../const';
 import EventForm from './eventForm';
 
 class Trip {
@@ -49,10 +49,6 @@ class Trip {
   }
 
   init() {
-    if (!this._filtersPresenter) {
-      this._filtersPresenter = new Filters(this._controlsElement, this._filtersModel, this._eventsModel);
-      this._filtersPresenter.init();
-    }
     this._renderAddEventButton();
     this._renderTrip();
   }
@@ -66,11 +62,11 @@ class Trip {
     this._addEventButtonComponent.setDisabled(true);
   }
 
-  _getEvents() {
-    const filterType = this._filtersModel.getFilter();
+  _getEvents(filterType) {
+    const filter = filterType || this._filtersModel.getFilter();
     const sortType = this._sortingModel.getSorting();
     const events = this._eventsModel.getEvents().slice();
-    const filteredEvents = filterTypeToCallBack[filterType](events);
+    const filteredEvents = filterTypeToCallBack[filter](events);
 
     return sortTypeToCallBack[sortType](filteredEvents);
   }
@@ -84,7 +80,7 @@ class Trip {
             this._eventsModel.updateEvent(updateType, response);
           })
           .catch(() => {
-            this._taskPresenter.get(update.id).setViewState(EventPresenterViewState.ABORTING);
+            this._eventPresenter.get(update.id).setViewState(EventPresenterViewState.ABORTING);
           });
         break;
       }
@@ -105,7 +101,7 @@ class Trip {
           this._eventsModel.deleteEvent(updateType, update);
         })
           .catch(() => {
-            this._taskPresenter.get(update.id).setViewState(EventPresenterViewState.ABORTING);
+            this._eventPresenter.get(update.id).setViewState(EventPresenterViewState.ABORTING);
           });
         break;
       }
@@ -124,7 +120,7 @@ class Trip {
         break;
       }
       case UpdateType.MAJOR: {
-        this._clearTrip({resetSortType: true, removeTripInfo: true});
+        this._clearTrip({resetFiltersType: true, resetSortType: true, removeTripInfo: true});
         this._renderTrip();
         break;
       }
@@ -221,6 +217,7 @@ class Trip {
     this._eventFormPresenter.destroy();
     this._eventPresenter.forEach((presenter) => presenter.destroy());
     this._eventPresenter.clear();
+    this._filtersPresenter.destroy();
 
     remove(this._eventsSortComponent);
     remove(this._noEventsComponent);
@@ -252,9 +249,21 @@ class Trip {
       return;
     }
 
-    const events = this._getEvents();
+    if (!this._filtersPresenter) {
+      this._filtersPresenter = new Filters(this._controlsElement, this._filtersModel, this._eventsModel);
+    }
+
+    this._filtersPresenter.init();
+
+    let filter = this._filtersModel.getFilter();
+    let events = this._getEvents(filter);
     const eventsCount = events.length;
-    const filter = this._filtersModel.getFilter();
+
+    if (!eventsCount && filter !== DEFAULT_FILTER) {
+      filter = DEFAULT_FILTER;
+      this._filtersModel.setFilter(UpdateType.FILTER, filter);
+      events = this._getEvents(filter);
+    }
     const isAddBtnDisbaled = this._addEventButtonComponent.getElement().disabled;
     const isFiltersDisabled = this._filtersPresenter.disabled;
 
