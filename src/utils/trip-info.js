@@ -5,7 +5,7 @@ import { humanizeEventStartDate } from '../utils/common';
 const calculateTripCost = (arr) =>
   arr.reduce((acc, reducer) => {
     let offersCost = 0;
-    const { price, offers } = reducer;
+    const { price = 0, offers } = reducer;
 
     if (offers) {
       offersCost = calculateTripCost(offers);
@@ -25,8 +25,8 @@ const getTripRange = (events) => {
 };
 
 const getDestinations = (events) => {
-  const start = events[0].destination.name;
-  const end = events[events.length - 1].destination.name;
+  const start = events[0].destination ? events[0].destination.name : '';
+  const end = events[events.length - 1].destination ? events[events.length - 1].destination.name : '';
 
   if (events.length === MIN_DESTINATIONS_TO_SHOW) {
     return [start];

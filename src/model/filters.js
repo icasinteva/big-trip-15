@@ -7,9 +7,12 @@ class FiltersModel extends AbstractObserver {
     this._activeFilter = DEFAULT_FILTER;
   }
 
-  setFilter(updateType, filterType) {
+  setFilter(filterType, updateType) {
     this._activeFilter = filterType;
-    this._notify(updateType, filterType);
+
+    if (updateType) {
+      this._notify(updateType, filterType);
+    }
   }
 
   getFilter() {

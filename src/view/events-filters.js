@@ -1,23 +1,28 @@
 import AbstractView from './abstract';
 import { Filter } from '../enums';
 
-const createFiltersItemTemplate = (filter, selectedFilter) => {
+const createFiltersItemTemplate = (filter, selectedFilter, disabledFilters) => {
   const checked = filter === selectedFilter ? 'checked' : '';
+  const disabled = disabledFilters.includes(filter) ? 'disabled' : '';
 
   return `<div class="trip-filters__filter">
-                  <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" data-filter-type=${filter} value=${filter} ${checked}>
+                  <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" data-filter-type=${filter} value=${filter} ${checked} ${disabled}>
                   <label class="trip-filters__filter-label" for="filter-${filter}">${filter}</label>
                 </div>`;
 };
 
-const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING, disabled = false) => {
-  const filters = [Filter.EVERYTHING, Filter.FUTURE, Filter.PAST];
-  const disabledClass = disabled ? 'trip-controls__filters--disabled' : '';
+const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING, disabled) => {
+  const filters = Object.values(Filter);
+  let disabledClass = '';
 
-  selectedFilter = !disabled ? selectedFilter : '';
+  if (typeof disabled === 'boolean') {
+    disabledClass = disabled ? 'trip-controls__filters--disabled' : '';
+    selectedFilter = !disabled ? selectedFilter : '';
+    disabled = [];
+  }
 
   const filterItemsTemplate = filters
-    .map((filter) => createFiltersItemTemplate(filter, selectedFilter))
+    .map((filter) => createFiltersItemTemplate(filter, selectedFilter, disabled))
     .join('');
 
   return `<div class="trip-controls__filters ${disabledClass}">
