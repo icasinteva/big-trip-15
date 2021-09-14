@@ -1,4 +1,4 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 import { MenuItem } from '../enums';
 
 const createSiteMenuTemplate = () =>
@@ -28,15 +28,18 @@ class SiteMenuView extends AbstractView {
 
   setMenuClickHandler(callback) {
     this._callback.menuClick = callback;
-    this.queryChildElements('.trip-tabs__btn').forEach((menuItem) => menuItem.addEventListener('click', this._menuClickHandler));
+    this.queryChildElements('.trip-tabs__btn').forEach((menuItem) =>
+      menuItem.addEventListener('click', this._menuClickHandler),
+    );
   }
 
   setMenuItem(menuItem) {
     const item = this.queryChildElement(`[data-value=${menuItem}]`);
 
-
     if (item !== null) {
-      this.queryChildElements('.trip-tabs__btn').forEach((menuLink) => menuLink.classList.remove('trip-tabs__btn--active'));
+      this.queryChildElements('.trip-tabs__btn').forEach((menuLink) =>
+        menuLink.classList.remove('trip-tabs__btn--active'),
+      );
       item.classList.add('trip-tabs__btn--active');
     }
   }

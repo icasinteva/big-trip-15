@@ -1,6 +1,7 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 
-const createEventsListItemTemplate = () => '<li class="trip-events__item"></li>';
+const createEventsListItemTemplate = () =>
+  '<li class="trip-events__item"></li>';
 
 class EventsListItemView extends AbstractView {
   getTemplate() {

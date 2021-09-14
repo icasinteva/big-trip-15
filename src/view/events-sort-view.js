@@ -1,4 +1,4 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 import { Sorting } from '../enums';
 
 const createEventsSortTemplate = (selected = Sorting.DAY) => {
@@ -27,16 +27,15 @@ const createEventsSortTemplate = (selected = Sorting.DAY) => {
   }
 
   const sortingItems = Object.entries(sort)
-    .map(
-      ([key, value]) => {
-        const checked = value.checked ? 'checked' : '';
-        const disabled = value.disabled ? 'disabled' : '';
+    .map(([key, value]) => {
+      const checked = value.checked ? 'checked' : '';
+      const disabled = value.disabled ? 'disabled' : '';
 
-        return `<div class="trip-sort__item  trip-sort__item--${key}">
+      return `<div class="trip-sort__item  trip-sort__item--${key}">
                   <input id="sort-${key}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" data-sort-type=${key} value="sort-${key}" ${checked} ${disabled}>
                   <label class="trip-sort__btn" for="sort-${key}">${key}</label>
                 </div>`;
-      })
+    })
     .join('');
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${sortingItems}</form>`;
@@ -63,7 +62,7 @@ class EventsSortView extends AbstractView {
 
   _sortTypeChangeHandler(evt) {
     const { target } = evt;
-    const {tagName, dataset} = target;
+    const { tagName, dataset } = target;
 
     if (tagName !== 'INPUT') {
       return;

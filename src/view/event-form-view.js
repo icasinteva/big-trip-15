@@ -2,9 +2,9 @@ import { nanoid } from 'nanoid';
 import { BLANK_EVENT } from '../const';
 import { RenderPosition } from '../enums';
 import { createElement, render } from '../utils/render';
-import { createFormTemplate } from '../utils/add-edit-form';
-import Smart from './smart';
-import EventDetailsView from './event-details-section';
+import { createFormTemplate } from '../utils/create-form-template';
+import Smart from './smart-view';
+import EventDetailsView from './event-details-view';
 import flatpickr from 'flatpickr';
 import Api from '../api/api';
 import { END_POINT, AUTHORIZATION } from '../const';
@@ -170,7 +170,7 @@ class EventFormView extends Smart {
   }
 
   _destinationChangeHandler({ target }) {
-    const destination = this._eventsModel.destinations.find(({ name }) => name === target.value) || { name: '' };
+    const destination = this._eventsModel.destinations.find(({ name }) => name === target.value) || { name: target.value };
     this.updateData({ destination });
   }
 

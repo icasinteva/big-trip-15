@@ -1,6 +1,6 @@
-import EventsListItemView from '../view/events-list-item';
-import EventView from '../view/event';
-import EventFormView from '../view/event-add-edit';
+import EventsListItemView from '../view/events-list-item-view';
+import EventView from '../view/event-view';
+import EventFormView from '../view/event-form-view';
 import { RenderPosition, UserAction, UpdateType } from '../enums';
 import { render, replace, remove } from '../utils/render.js';
 import { onEscKeyDown, isOnline } from '../utils/common';

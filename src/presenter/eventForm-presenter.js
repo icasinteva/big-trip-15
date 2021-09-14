@@ -1,7 +1,7 @@
-import EventFormView from '../view/event-add-edit';
+import EventFormView from '../view/event-form-view';
 import { RenderPosition, UserAction, UpdateType } from '../enums';
 import {remove, render} from '../utils/render.js';
-import EventsListItemView from '../view/events-list-item';
+import EventsListItemView from '../view/events-list-item-view';
 
 class EventForm {
   constructor(eventsListContainer, eventsModel, updateEvent, exitAddMode) {

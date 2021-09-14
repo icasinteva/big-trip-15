@@ -1,7 +1,7 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 import { RenderPosition } from '../enums';
 import { createElement, render } from '../utils/render';
-import GallerySectionView from './gallery-section';
+import GallerySectionView from './gallery-section-view';
 
 const createDescriptionSectionTemplate = (description = '') => {
   const descriptionSection = description ? `<p class="event__destination-description">${description}</p>` : '';

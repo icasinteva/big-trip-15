@@ -1,17 +1,3 @@
-import dayjs from 'dayjs';
-import { getRandomInteger } from '../utils/common';
-
-const generateDate = () => {
-  const maxDaysGap = 7;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-  const hoursGap = getRandomInteger(0, 72);
-
-  return dayjs()
-    .add(daysGap, 'day')
-    .add(hoursGap, 'hour')
-    .add(getRandomInteger(0, 34), 'minute');
-};
-
 const convertMS = (diffMinutes) => {
   const dayMinutes = 24 * 60;
   const days = Math.trunc(diffMinutes / dayMinutes);
@@ -49,4 +35,4 @@ const updateItem = (items, updatedItem) => items.map((item) => item.id === updat
 
 const deleteItem = (items, deletedItem) => items.filter(({ id }) => id !== deletedItem.id);
 
-export { generateDate, getDuration, updateItem, addItem, deleteItem};
+export { getDuration, updateItem, addItem, deleteItem};

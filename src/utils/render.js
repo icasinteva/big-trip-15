@@ -1,5 +1,5 @@
 import { RenderPosition } from '../enums';
-import AbstractView from '../view/abstract';
+import AbstractView from '../view/abstract-view';
 
 const createElement = (template) => {
   const newElement = document.createElement('div');
@@ -59,7 +59,7 @@ const replace = (newChild, oldChild) => {
 
   const parent = oldChild.parentElement;
 
-  if (parent === null || oldChild === null || newChild === null) {
+  if (newChild === null || oldChild === null || parent === null) {
     throw new Error('Can\'t replace unexisting elements');
   }
 

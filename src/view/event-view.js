@@ -1,13 +1,19 @@
-import AbstractView from './abstract';
-import EventOffersListView from './event-offers-list';
+import AbstractView from './abstract-view';
+import EventOffersListView from './event-offers-list-view';
 import { render, createElement, createPriceTemplate } from '../utils/render';
 import { humanizeEventDate, humanizeEventStartDate } from '../utils/common';
 import { getDuration } from '../utils/event';
 import { RenderPosition } from '../enums';
 
 const createEventTemplate = (event) => {
-  const { eventType, destination = {}, startDate, endDate, price, isFavorite } =
-    event;
+  const {
+    eventType,
+    destination = {},
+    startDate,
+    endDate,
+    price,
+    isFavorite,
+  } = event;
   const { name = '' } = destination;
   const startTime = humanizeEventDate(startDate, 'HH:mm');
   const endTime = humanizeEventDate(endDate, 'HH:mm');
@@ -64,7 +70,11 @@ class EventView extends AbstractView {
       const { offers } = this._event;
 
       this._element = createElement(this.getTemplate());
-      render(this._element.querySelector('button.event__favorite-btn'), new EventOffersListView(offers).getElement(), RenderPosition.BEFOREBEGIN);
+      render(
+        this._element.querySelector('button.event__favorite-btn'),
+        new EventOffersListView(offers).getElement(),
+        RenderPosition.BEFOREBEGIN,
+      );
     }
 
     return this._element;
@@ -82,12 +92,18 @@ class EventView extends AbstractView {
 
   setEditClickHanlder(callback) {
     this._callback.editClick = callback;
-    this.queryChildElement('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    this.queryChildElement('.event__rollup-btn').addEventListener(
+      'click',
+      this._editClickHandler,
+    );
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    this.queryChildElement('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
+    this.queryChildElement('.event__favorite-btn').addEventListener(
+      'click',
+      this._favoriteClickHandler,
+    );
   }
 }
 export default EventView;

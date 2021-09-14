@@ -1,4 +1,4 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 import { Filter } from '../enums';
 
 const createFiltersItemTemplate = (filter, selectedFilter, disabledFilters) => {
@@ -11,7 +11,10 @@ const createFiltersItemTemplate = (filter, selectedFilter, disabledFilters) => {
                 </div>`;
 };
 
-const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING, disabled) => {
+const createFiltersTemplate = (
+  selectedFilter = Filter.EVERYTHING,
+  disabled,
+) => {
   const filters = Object.values(Filter);
   let disabledClass = '';
 
@@ -22,7 +25,9 @@ const createFiltersTemplate = (selectedFilter = Filter.EVERYTHING, disabled) => 
   }
 
   const filterItemsTemplate = filters
-    .map((filter) => createFiltersItemTemplate(filter, selectedFilter, disabled))
+    .map((filter) =>
+      createFiltersItemTemplate(filter, selectedFilter, disabled),
+    )
     .join('');
 
   return `<div class="trip-controls__filters ${disabledClass}">

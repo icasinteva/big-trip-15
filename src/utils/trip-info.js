@@ -2,8 +2,8 @@
 import { MIN_DESTINATIONS_TO_SHOW, DESTINATIONS_TO_SHOW } from '../const';
 import { humanizeEventStartDate } from '../utils/common';
 
-const calculateTripCost = (arr) =>
-  arr.reduce((acc, reducer) => {
+const calculateTripCost = (items) =>
+  items.reduce((acc, reducer) => {
     let offersCost = 0;
     const { price = 0, offers } = reducer;
 

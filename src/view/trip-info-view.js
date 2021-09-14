@@ -1,6 +1,6 @@
 import { createPriceTemplate } from '../utils/render';
 import { calculateTripCost, getTripRange, getDestinations } from '../utils/trip-info';
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 
 const createTripInfoTemplate = (events) => {
   const { startDate, endDate } = getTripRange(events);

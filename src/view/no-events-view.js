@@ -1,4 +1,4 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 import { Filter } from '../enums';
 
 const messages = {
@@ -7,7 +7,8 @@ const messages = {
   [Filter.FUTURE]: 'There are no future events now',
 };
 
-const createNoEventTemplate = (filter) => `<p class="trip-events__msg">${messages[filter]}</p>`;
+const createNoEventTemplate = (filter) =>
+  `<p class="trip-events__msg">${messages[filter]}</p>`;
 
 class NoEventsView extends AbstractView {
   constructor(filter = Filter.EVERYTHING) {

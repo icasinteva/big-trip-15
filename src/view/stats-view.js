@@ -1,7 +1,7 @@
 import { getDuration } from '../utils/event';
 import { EventType } from '../enums';
 import { renderChart } from '../utils/chart';
-import Smart from './smart';
+import Smart from './smart-view';
 
 const prepareChartData = (events, callback) => {
   const res = [];

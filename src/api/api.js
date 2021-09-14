@@ -1,4 +1,4 @@
-import EventsModel from '../model/events';
+import EventsModel from '../model/events-model';
 
 const Method = {
   GET: 'GET',
@@ -14,28 +14,26 @@ class Api {
   }
 
   getEvents() {
-    return this._load({url: 'points'})
+    return this._load({ url: 'points' })
       .then(Api.toJSON)
       .then((events) => events.map(EventsModel.adaptToClient));
   }
 
   getDestinations() {
-    return this._load({ url: 'destinations' })
-      .then(Api.toJSON);
+    return this._load({ url: 'destinations' }).then(Api.toJSON);
   }
 
   getOffers() {
-    return this._load({url: 'offers'})
-      .then(Api.toJSON);
+    return this._load({ url: 'offers' }).then(Api.toJSON);
   }
 
   updateEvent(event) {
     return this._load({
       url: `points/${event.id}`,
       method: Method.PUT,
-      mode:'cors',
+      mode: 'cors',
       body: JSON.stringify(EventsModel.adaptToServer(event)),
-      headers: new Headers({'Content-Type': 'application/json'}),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
     })
       .then(Api.toJSON)
       .then(EventsModel.adaptToClient);
@@ -46,7 +44,7 @@ class Api {
       url: 'points',
       method: Method.POST,
       body: JSON.stringify(EventsModel.adaptToServer(event)),
-      headers: new Headers({'Content-Type': 'application/json'}),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
     })
       .then(Api.toJSON)
       .then(EventsModel.adaptToClient);
@@ -64,23 +62,14 @@ class Api {
       url: 'events/sync',
       method: Method.POST,
       body: JSON.stringify(data),
-      headers: new Headers({'Content-Type': 'application/json'}),
-    })
-      .then(Api.toJSON);
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    }).then(Api.toJSON);
   }
 
-  _load({
-    url,
-    method = Method.GET,
-    body = null,
-    headers = new Headers(),
-  }) {
+  _load({ url, method = Method.GET, body = null, headers = new Headers() }) {
     headers.append('Authorization', this._authorization);
 
-    return fetch(
-      `${this._endPoint}/${url}`,
-      {method, body, headers},
-    )
+    return fetch(`${this._endPoint}/${url}`, { method, body, headers })
       .then(Api.checkStatus)
       .catch(Api.catchError);
   }

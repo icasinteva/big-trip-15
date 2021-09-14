@@ -1,14 +1,8 @@
-import AbstractView from './abstract';
+import AbstractView from './abstract-view';
 import { createPriceTemplate } from '../utils/render';
 import { nanoid } from 'nanoid';
 
-
-const createOfferItemTemplate = ({
-  title,
-  id = nanoid(),
-  selected,
-  price,
-}) => {
+const createOfferItemTemplate = ({ title, id = nanoid(), selected, price }) => {
   const checked = selected ? 'checked' : '';
 
   return `<div class="event__offer-selector">
@@ -24,7 +18,10 @@ class OfferItemView extends AbstractView {
   constructor(offerData, offersChangeHandler) {
     super();
     this._offerData = offerData;
-    this.queryChildElement('.event__offer-checkbox').addEventListener('change', offersChangeHandler);
+    this.queryChildElement('.event__offer-checkbox').addEventListener(
+      'change',
+      offersChangeHandler,
+    );
   }
 
   getTemplate() {

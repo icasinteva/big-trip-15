@@ -1,9 +1,9 @@
-import EventsFiltersView from '../view/events-filters';
+import EventsFiltersView from '../view/events-filters-view';
 import { remove, render } from '../utils/render';
 import { RenderPosition, UpdateType, Filter } from '../enums';
 import { filterTypeToCallBack } from '../utils/filters';
 
-class Filters {
+class FiltersPresenter {
   constructor(filtersContainer, filtersModel, eventsModel) {
     this._disabled = false;
     this._filtersContainer = filtersContainer;
@@ -15,7 +15,9 @@ class Filters {
   }
 
   init() {
-    this._getDisabledFilters();
+    if (!this._disabled) {
+      this._getDisabledFilters();
+    }
 
     this._filtersComponent = new EventsFiltersView(this._filtersModel.getFilter(), this._disabled);
     render(this._filtersContainer, this._filtersComponent, RenderPosition.BEFOREEND);
@@ -74,4 +76,4 @@ class Filters {
   }
 }
 
-export default Filters;
+export default FiltersPresenter;
