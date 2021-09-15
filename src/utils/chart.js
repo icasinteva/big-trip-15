@@ -32,6 +32,10 @@ const renderChart = (container, { labels, data, formatter, title }) => new Chart
       fontSize: 23,
       position: 'left',
     },
+    dataset: {
+      barThickness: 44,
+      minBarLength: 80,
+    },
     scales: {
       yAxes: [{
         ticks: {
@@ -43,7 +47,6 @@ const renderChart = (container, { labels, data, formatter, title }) => new Chart
           display: false,
           drawBorder: false,
         },
-        barThickness: 44,
       }],
       xAxes: [{
         ticks: {
@@ -54,7 +57,6 @@ const renderChart = (container, { labels, data, formatter, title }) => new Chart
           display: false,
           drawBorder: false,
         },
-        minBarLength: 80,
       }],
     },
     legend: {

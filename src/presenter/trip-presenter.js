@@ -14,7 +14,7 @@ import { isOnline } from '../utils/common';
 import { toast } from '../utils/toast';
 import TripInfoView from '../view/trip-info-view';
 import { DEFAULT_FILTER, DEFAULT_SORTING } from '../const';
-import EventForm from './eventForm-presenter';
+import EventFormPresenter from './event-form-presenter';
 
 class TripPresenter {
   constructor(pageContainer, filtersModel, sortingModel, eventsModel, api) {
@@ -320,7 +320,7 @@ class TripPresenter {
     }
 
     this._eventsListComponent = new EventsListView();
-    this._eventFormPresenter = new EventForm(
+    this._eventFormPresenter = new EventFormPresenter(
       this._eventsListComponent,
       this._eventsModel,
       this._handleViewAction,

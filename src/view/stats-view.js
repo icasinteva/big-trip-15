@@ -1,7 +1,7 @@
 import { getDuration } from '../utils/event';
 import { EventType } from '../enums';
 import { renderChart } from '../utils/chart';
-import Smart from './smart-view';
+import SmartView from './smart-view';
 
 const prepareChartData = (events, callback) => {
   const res = [];
@@ -50,7 +50,7 @@ const createStatsSectionTemplate = () => `<section class="statistics">
     </div>
   </section>`;
 
-class StatsView extends Smart {
+class StatsView extends SmartView {
   constructor(events) {
     super();
     this._events = events;

@@ -3,7 +3,7 @@ import { RenderPosition, UserAction, UpdateType } from '../enums';
 import {remove, render} from '../utils/render.js';
 import EventsListItemView from '../view/events-list-item-view';
 
-class EventForm {
+class EventFormPresenter {
   constructor(eventsListContainer, eventsModel, updateEvent, exitAddMode) {
     this._eventsListContainer = eventsListContainer;
     this._eventsModel = eventsModel;
@@ -91,4 +91,4 @@ class EventForm {
   }
 }
 
-export default EventForm;
+export default EventFormPresenter;

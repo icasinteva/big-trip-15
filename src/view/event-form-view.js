@@ -3,7 +3,7 @@ import { BLANK_EVENT } from '../const';
 import { RenderPosition } from '../enums';
 import { createElement, render } from '../utils/render';
 import { createFormTemplate } from '../utils/create-form-template';
-import Smart from './smart-view';
+import SmartView from './smart-view';
 import EventDetailsView from './event-details-view';
 import flatpickr from 'flatpickr';
 import Api from '../api/api';
@@ -12,7 +12,7 @@ import { END_POINT, AUTHORIZATION } from '../const';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { humanizeEventDate, transformDateToUsFormat, transformDateForDatePicker } from '../utils/common';
 
-class EventFormView extends Smart {
+class EventFormView extends SmartView {
   constructor(eventsModel, event = BLANK_EVENT) {
     super();
     this._eventsModel = eventsModel;

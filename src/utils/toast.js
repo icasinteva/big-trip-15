@@ -1,19 +1,26 @@
 const SHOW_TIME = 5000;
 
-const toastContainer = document.createElement('div');
-toastContainer.classList.add('toast-container');
-document.body.append(toastContainer);
+const createToastTemplate = (message) => `<div class="toast-container">
+            <div class="toast">
+              <p class="t-close"></p>
+              <p class="t-text">${message}</p>
+          </div>
+        </div>`;
 
 const toast = (message) => {
-  const toastItem = document.createElement('div');
-  toastItem.textContent = message;
-  toastItem.classList.add('toast-item');
+  const div = document.createElement('div');
+  div.innerHTML = createToastTemplate(message);
 
-  toastContainer.append(toastItem);
+  const toastItem = div.firstChild;
+
+  document.body.append(toastItem);
+  document.querySelector('.toast-container .toast .t-close').addEventListener('click', () => {
+    toastItem.remove();
+  });
 
   setTimeout(() => {
     toastItem.remove();
   }, SHOW_TIME);
 };
 
-export {toast};
+export { toast };
